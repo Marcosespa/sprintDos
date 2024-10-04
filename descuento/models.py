@@ -1,9 +1,9 @@
 from django.db import models
 
-# Create your models here.
 class Descuento(models.Model):
+    id_descuento = models.AutoField(primary_key=True)
     fecha_aplicacion = models.DateField()
-    valor_descuento = models.FloatField()
+    valor_descuento = models.DecimalField(max_digits=10, decimal_places=2)
 
     def __str__(self):
-        return self.fecha_aplicacion
+        return f"Descuento {self.id_descuento} - Valor: {self.valor_descuento}"

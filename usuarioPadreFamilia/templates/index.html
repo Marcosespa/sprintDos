@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página Principal - Usuario Padre de Familia</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}"> <!-- Asegúrate de tener configurado el archivo de estilos -->
+</head>
+<body>
+    <header>
+        <h1>Bienvenido al Sistema de Usuarios de Padres de Familia</h1>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="{% url 'usuarioPadreFamilia_index' %}">Inicio</a></li>
+            <li><a href="{% url 'otra_vista' %}">Otra Vista</a></li> <!-- Cambia o agrega otras vistas según tu necesidad -->
+        </ul>
+    </nav>
+
+    <main>
+        <section>
+            <h2>Información Importante</h2>
+            <p>Aquí puedes encontrar información relevante para padres de familia, como detalles de pagos, actividades y más.</p>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 - Sistema de Usuarios de Padres de Familia</p>
+    </footer>
+</body>
+</html>
