@@ -1,5 +1,6 @@
 from django.db import models
 
+from cronograma.models import Cronograma
 from descuento.models import Descuento
 from recibo.models import Recibo
 from usuarioPadreFamilia.models import UsuarioPadreFamilia
@@ -14,11 +15,15 @@ class Pago(models.Model):
 
     id_pago = models.AutoField(primary_key=True)
     fecha_pago = models.DateField()
-    valor_pago = models.DecimalField(max_digits=10, decimal_places=2)
-    estado_pago = models.CharField(max_length=15, choices=ESTADO_PAGO_CHOICES, default='PENDIENTE')
-    tipo_pago = models.CharField(max_length=100)
-    nombre_pago = models.CharField(max_length=100)
-    usuario = models.ForeignKey(UsuarioPadreFamilia, on_delete=models.CASCADE)
-    
+    valor_pago = models.DecimalField(max_digits=10, decimal_places=2,default=0)
+    estado_pago = models.CharField(max_length=100,default="")
+    tipo_pago = models.CharField(max_length=100,default="")
+    nombre_pago= models.CharField(max_length=100, default="Pago genérico")
+    descuentos = models.ManyToManyField(Descuento)
+    recibo= models.OneToOneField(Recibo,null=True, blank=True, on_delete=models.CASCADE)
+    cronograma= models.ForeignKey(Cronograma, on_delete=models.CASCADE,null=True, blank=True)
+    usuario_padre = models.ForeignKey(UsuarioPadreFamilia, on_delete=models.CASCADE, null=True, blank=True) 
+
     def __str__(self):
-        return f"Pago {self.id_pago} - {self.nombre_pago}"
+        return f"Pago de {self.nombre_pago} - {self.valor_pago}"
+# Create your models here.
