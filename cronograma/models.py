@@ -2,7 +2,7 @@ from django.db import models
 
 # Create your models here.
 class Cronograma(models.Model):
-    id_cronograma = models.AutoField(primary_key=True)
+    id_cronograma = models.IntegerField(default=0)
     valor_total = models.DecimalField(max_digits=10, decimal_places=2)
     mes = models.CharField(max_length=50)
 
