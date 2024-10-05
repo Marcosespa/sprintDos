@@ -8,7 +8,8 @@ class Recibo(models.Model):
         ('PAGADO', 'Pagado'),
     ]
 
-    id_recibo = models.AutoField(primary_key=True)
+    id_recibo = models.IntegerField(default=0)
+
     fecha_emision = models.DateField()
     codigo_barras = models.CharField(max_length=100, unique=True)
     estado = models.CharField(max_length=10, choices=ESTADO_RECIBO_CHOICES, default='POR PAGAR')
