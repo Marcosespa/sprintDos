@@ -4,3 +4,4 @@ from .models import Cronograma
 admin.site.register(Cronograma)
 
 # Register your models here.
+#PruebaPermiso
