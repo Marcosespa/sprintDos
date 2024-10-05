@@ -2,5 +2,8 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.index, name='usuarioPadreFamilia_index'),  # Página principal
+    path('index_PadreFamilia/', index_PadreFamilia, name='index_PadreFamilia'),  # Página principal
 ]
+
+
+
