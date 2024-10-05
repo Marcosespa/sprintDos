@@ -81,7 +81,7 @@ WSGI_APPLICATION = 'sprintDos.wsgi.application'
 DATABASES = {
     'default': {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": "sprintdos_user",
+        "NAME": "sprintdos_db",
         "USER": "sprintdos_user",
         "PASSWORD": "sprint2",
         "HOST": "10.128.0.2",
