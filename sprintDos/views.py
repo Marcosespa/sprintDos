@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages 
 from django.contrib.auth.models import User
 
-
+@login_required
 def index(request):
     if request.user.is_authenticated:
         return render(request, 'index.html')  # Plantilla para usuarios autenticados
@@ -26,7 +26,7 @@ def index(request):
 
 
     return render(request, 'index_PadreFamilia.html')  # Plantilla para login cuando el usuario no está autenticado
-
+@login_required
 def crear_usuario(request):
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -44,6 +44,6 @@ def crear_usuario(request):
 
     return render(request, 'crear_usuario.html')
 
-#@login_required
+@login_required
 def index_PadreFamilia(request):
     return render(request, 'index_PadreFamilia.html')
