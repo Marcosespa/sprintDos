@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from usuarioPadreFamilia.models import UsuarioPadreFamilia
-
+@login_required
 def index(request):
     if request.user.is_authenticated:
         return render(request, 'index.html')  # Plantilla para usuarios autenticados
@@ -45,6 +45,7 @@ def crear_usuario(request):
                 messages.error(request, f'Error al crear el usuario: {str(e)}')
 
     return render(request, 'crear_usuario.html')
-
+  
+@login_required
 def index_PadreFamilia(request):
     return render(request, 'index_PadreFamilia.html')
