@@ -3,7 +3,8 @@ from . import views
 from .views import index_PadreFamilia  # Importar la vista desde views.py
 
 urlpatterns = [
-    path('index_PadreFamilia/', index_PadreFamilia, name='index_PadreFamilia'),  # Página principal
+    path('index_PadreFamilia/', views.index_PadreFamilia, name='index_PadreFamilia'),  
+
 ]
 
 

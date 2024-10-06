@@ -5,15 +5,7 @@ import usuarioPadreFamilia.urls  # Asegúrate de importar las URLs de tu app
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.index),
+    path('', views.index, name='index'),  # Página principal para el index
     path('crear-usuario/', views.crear_usuario, name='crear_usuario'),
-    
-    path('',include(usuarioPadreFamilia.urls)),
-    
-
-    # path('', pagina_principal, name='pagina_principal'),
-    # path('index_PadreFamilia/', include('usuarioPadreFamilia.urls')),
-    # path('pago/', include('pago.urls')),
-    # path('cronograma/', include('cronograma.urls')),
-    
+    path('padre/', include('usuarioPadreFamilia.urls')),  # Ahora 'usuarioPadreFamilia' está en 'padre/'
 ]

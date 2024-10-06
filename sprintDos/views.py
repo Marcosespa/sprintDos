@@ -27,14 +27,14 @@ def crear_usuario(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
-        
+
         if User.objects.filter(username=username).exists():
             messages.error(request, 'El nombre de usuario ya existe.')
         else:
             try:
                 User.objects.create_user(username=username, password=password)
                 messages.success(request, 'Usuario creado con éxito.')
-                return redirect('index')
+                return redirect('index')  # Asegúrate de redirigir a 'index'
             except Exception as e:
                 messages.error(request, f'Error al crear el usuario: {str(e)}')
 
