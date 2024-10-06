@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.urls import include, path
 from . import views
+import usuarioPadreFamilia.urls  # Asegúrate de importar las URLs de tu app
 
 urlpatterns = [
     path('admin/', admin.site.urls),
