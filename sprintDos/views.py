@@ -23,8 +23,10 @@ def index(request):
             return redirect('/index_PadreFamilia')  # Redirige a 'index_PadreFamilia' si el login es correcto
         else:
             messages.error(request, 'Credenciales incorrectas')
+            return redirect('index')  
 
-    return render(request, 'index.html')  # Plantilla para login cuando el usuario no está autenticado
+
+    return render(request, 'index_PadreFamilia.html')  # Plantilla para login cuando el usuario no está autenticado
 
 def crear_usuario(request):
     if request.method == 'POST':
