@@ -17,7 +17,7 @@ def index(request):
 
         if user is not None:
             login(request, user)
-            return redirect('index')  # Redirige al index si el login es correcto
+            return redirect('index_PadreFamilia')  # Redirige al index si el login es correcto
         else:
             messages.error(request, 'Credenciales incorrectas')
 
