@@ -20,9 +20,38 @@
         <section>
             <h2>Información Importante</h2>
             <p>Aquí puedes encontrar información relevante para padres de familia, como detalles de pagos, actividades y más.</p>
-            <p>PIPEE</p>
+            
         </section>
     </main>
+
+    <h2>Pagos para el cronograma del mes {{ cronograma.mes }}</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Fecha de Pago</th>
+                <th>Valor</th>
+                <th>Estado</th>
+                <th>Tipo</th>
+                <th>Nombre</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for pago in pagos %}
+            <tr>
+                <td>{{ pago.fecha_pago }}</td>
+                <td>{{ pago.valor_pago }}</td>
+                <td>{{ pago.estado_pago }}</td>
+                <td>{{ pago.tipo_pago }}</td>
+                <td>{{ pago.nombre_pago }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5">No hay pagos para este cronograma.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 
     <footer>
         <p>&copy; 2024 - Sistema de Usuarios de Padres de Familia</p>

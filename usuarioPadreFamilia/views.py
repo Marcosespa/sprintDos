@@ -4,6 +4,8 @@ from django.urls import reverse_lazy
 from django.shortcuts import redirect, render
 from django.views.generic.edit import UpdateView
 from usuarioPadreFamilia.models import UsuarioPadreFamilia
+from cronograma.models import Cronograma
+from django.shortcuts import render, get_object_or_404
 
 
 class SimpleLoginView(LoginView):
@@ -28,3 +30,8 @@ def index(request):
 def index_PadreFamilia(request):
     # Lógica de la vista
     return render(request, 'index_PadreFamilia.html')
+
+def pagos_por_cronograma(request, cronograma_id):
+    cronograma = get_object_or_404(Cronograma, id=cronograma_id)
+    pagos = cronograma.pago_set.all()  # Obtener todos los pagos asociados al cronograma
+    return render(request, 'pagos_por_cronograma.html', {'cronograma': cronograma, 'pagos': pagos})
