@@ -8,7 +8,9 @@ from usuarioPadreFamilia.models import UsuarioPadreFamilia
 
 @login_required
 def index(request):
+    
     return render(request, 'index_PadreFamilia.html')
+
     # if request.user.is_authenticated:
     #     return render(request, 'index.html')  # Plantilla para usuarios autenticados
 
@@ -29,7 +31,6 @@ def index(request):
 
     # return render(request, 'index_PadreFamilia.html')
 
-@login_required
 def crear_usuario(request):
     if request.method == 'POST':
         username = request.POST.get('username')
