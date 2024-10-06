@@ -19,6 +19,7 @@ class UsuarioPadreFamiliaManager(BaseUserManager):
 class UsuarioPadreFamilia(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(max_length=50, unique=True)
     descripcion = models.CharField(max_length=255, default='Sin descripción')
+    password = models.CharField(max_length=128, default='default_password')  # Agrega un valor por defecto
     estudiante_relacionado = models.CharField(max_length=100, default='No reconocido')
 
     is_active = models.BooleanField(default=True)
