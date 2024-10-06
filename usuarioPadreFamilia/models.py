@@ -3,7 +3,7 @@ from django.contrib.auth.hashers import make_password, check_password
 
 class UsuarioPadreFamilia(models.Model):
     username = models.CharField(max_length=50, unique=True)
-    contrasenia = models.CharField(max_length=128)  # Almacenar hashes de contraseña
+    password = models.CharField(max_length=128, default='default_password')  # Agrega un valor por defecto
     descripcion = models.CharField(max_length=255, default='Sin descripción')
     estudiante_relacionado = models.CharField(max_length=100, default='No reconocido')
     
