@@ -6,7 +6,7 @@ import usuarioPadreFamilia.urls  # Asegúrate de importar las URLs de tu app
 urlpatterns = [
     path('admin/', admin.site.urls),
     #path('', views.index, name='index'),  # Página principal para el index
-    path('', include('usuarioPadreFamilia.urls')),
+    path('usuarioPadreFamilia/', include('usuarioPadreFamilia.urls')),
     path('crear-usuario/', views.crear_usuario, name='crear_usuario'),
     path('accounts/', include('django.contrib.auth.urls')),
 ]
