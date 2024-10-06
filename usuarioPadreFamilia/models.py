@@ -18,7 +18,6 @@ class UsuarioPadreFamiliaManager(BaseUserManager):
 
 class UsuarioPadreFamilia(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(max_length=50, unique=True)
-    contrasenia = models.CharField(max_length=50)
     descripcion = models.CharField(max_length=255, default='Sin descripción')
     estudiante_relacionado = models.CharField(max_length=100, default='No reconocido')
 
@@ -28,7 +27,7 @@ class UsuarioPadreFamilia(AbstractBaseUser, PermissionsMixin):
     objects = UsuarioPadreFamiliaManager()
 
     USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = [] 
+    REQUIRED_FIELDS = []
 
     def __str__(self):
         return self.username
