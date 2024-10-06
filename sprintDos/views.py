@@ -6,27 +6,29 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from usuarioPadreFamilia.models import UsuarioPadreFamilia
 
-# @login_required
-# def index(request):
-#     if request.user.is_authenticated:
-#         return render(request, 'index.html')  # Plantilla para usuarios autenticados
+@login_required
+def index(request):
+    return render(request, 'index_PadreFamilia.html')
 
-#     if request.method == 'POST':
-#         username = request.POST.get('username')
-#         password = request.POST.get('password')
-#         try:
-#             user = UsuarioPadreFamilia.objects.get(username=username)
-#             if user.check_password(password):
-#                 login(request, user) 
-#                 return redirect('index_PadreFamilia') 
-#             else:
-#                 messages.error(request, 'Credenciales incorrectas')
-#                 return redirect('index')  
-#         except UsuarioPadreFamilia.DoesNotExist:
-#             messages.error(request, 'Credenciales incorrectas')
-#             return redirect('index')  
+    # if request.user.is_authenticated:
+    #     return render(request, 'index.html')  # Plantilla para usuarios autenticados
 
-#     return render(request, 'index_PadreFamilia.html')
+    # if request.method == 'POST':
+    #     username = request.POST.get('username')
+    #     password = request.POST.get('password')
+    #     try:
+    #         user = UsuarioPadreFamilia.objects.get(username=username)
+    #         if user.check_password(password):
+    #             login(request, user) 
+    #             return redirect('index_PadreFamilia') 
+    #         else:
+    #             messages.error(request, 'Credenciales incorrectas')
+    #             return redirect('index')  
+    #     except UsuarioPadreFamilia.DoesNotExist:
+    #         messages.error(request, 'Credenciales incorrectas')
+    #         return redirect('index')  
+
+    # return render(request, 'index_PadreFamilia.html')
 
 @login_required
 def crear_usuario(request):
