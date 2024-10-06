@@ -1,6 +1,5 @@
 from django.contrib import admin
 from django.urls import include, path
-from pago.views import pagina_principal  # Importa la vista de la página principal
 
 urlpatterns = [
     path('admin/', admin.site.urls),
