@@ -23,3 +23,8 @@ def usuario_padre_familia_edit_view(request):
     return render(request, 'app/usuario_edit.html', {'form': form})
 def index(request):
     return render(request, 'usuarioPadreFamilia/index.html')  
+
+
+def index_PadreFamilia(request):
+    # Lógica de la vista
+    return render(request, 'index_PadreFamilia.html')
