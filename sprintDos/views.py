@@ -44,6 +44,6 @@ def crear_usuario(request):
 
     return render(request, 'crear_usuario.html')
 
-@login_required
+#@login_required
 def index_PadreFamilia(request):
     return render(request, 'index_PadreFamilia.html')
