@@ -7,6 +7,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index),
     path('crear-usuario/', views.crear_usuario, name='crear_usuario'),
+    
     path('',include(usuarioPadreFamilia.urls)),
     
 
