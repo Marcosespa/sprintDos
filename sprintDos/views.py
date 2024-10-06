@@ -17,6 +17,7 @@ def index(request):
 
         if user is not None:
             login(request, user)
+            print(f"Usuario {username} ha iniciado sesión correctamente.")  # Mensaje en la consola
             return redirect('index_PadreFamilia')  # Redirige a 'index_PadreFamilia' si el login es correcto
         else:
             messages.error(request, 'Credenciales incorrectas')
