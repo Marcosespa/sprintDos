@@ -7,5 +7,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index, name='index'),  # Página principal para el index
     path('crear-usuario/', views.crear_usuario, name='crear_usuario'),
-    path('padre/', include('usuarioPadreFamilia.urls')),  # Ahora 'usuarioPadreFamilia' está en 'padre/'
+    path('padre-familia/', include('usuarioPadreFamilia.urls')),  # Incluye las URLs de usuarioPadreFamilia
 ]

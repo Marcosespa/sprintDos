@@ -17,7 +17,7 @@ def index(request):
 
         if user is not None:
             login(request, user)
-            return redirect('index_PadreFamilia')  # Redirige al index si el login es correcto
+            return redirect('index_PadreFamilia')  # Redirige a 'index_PadreFamilia' si el login es correcto
         else:
             messages.error(request, 'Credenciales incorrectas')
 
@@ -27,14 +27,14 @@ def crear_usuario(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
-
+        
         if User.objects.filter(username=username).exists():
             messages.error(request, 'El nombre de usuario ya existe.')
         else:
             try:
                 User.objects.create_user(username=username, password=password)
                 messages.success(request, 'Usuario creado con éxito.')
-                return redirect('index')  # Asegúrate de redirigir a 'index'
+                return redirect('index')
             except Exception as e:
                 messages.error(request, f'Error al crear el usuario: {str(e)}')
 
