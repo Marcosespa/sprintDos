@@ -26,6 +26,7 @@ def index(request):
 
 
     return render(request, 'index_PadreFamilia.html')  # Plantilla para login cuando el usuario no está autenticado
+  
 @login_required
 def crear_usuario(request):
     if request.method == 'POST':
@@ -44,6 +45,5 @@ def crear_usuario(request):
 
     return render(request, 'crear_usuario.html')
 
-@login_required
 def index_PadreFamilia(request):
     return render(request, 'index_PadreFamilia.html')
