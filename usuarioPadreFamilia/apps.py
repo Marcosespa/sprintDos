@@ -1,5 +1,5 @@
 from django.apps import AppConfig
 
-
-class UsuariopadrefamiliaConfig(AppConfig):
+class UsuarioPadreFamiliaConfig(AppConfig):
+    default_auto_field = 'django.db.models.BigAutoField'
     name = 'usuarioPadreFamilia'
