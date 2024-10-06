@@ -9,7 +9,6 @@ from usuarioPadreFamilia.models import UsuarioPadreFamilia
 @login_required
 def index(request):
     return render(request, 'index_PadreFamilia.html')
-
     # if request.user.is_authenticated:
     #     return render(request, 'index.html')  # Plantilla para usuarios autenticados
 
