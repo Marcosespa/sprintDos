@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 
 def index(request):
     if request.user.is_authenticated:
-        return render(request, 'pagina_principal.html') 
+        return render(request, 'index.html') 
 
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -17,11 +17,11 @@ def index(request):
 
         if user is not None:
             login(request, user)
-            return redirect('pagina_principal') 
+            return redirect('index') 
         else:
             messages.error(request, 'Credenciales incorrectas')
 
-    return render(request, 'pagina_principal.html')  
+    return render(request, 'index.html')  
   
 def crear_usuario(request):
   if request.method == 'POST':
@@ -31,7 +31,7 @@ def crear_usuario(request):
       try:
           User.objects.create_user(username=username, password=password)
           messages.success(request, 'Usuario creado con éxito.')
-          return redirect('pagina_principal') 
+          return redirect('index') 
       except Exception as e:
           messages.error(request, f'Error al crear el usuario: {str(e)}')
   return render(request, 'crear_usuario.html')
