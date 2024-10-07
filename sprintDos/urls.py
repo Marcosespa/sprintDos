@@ -9,5 +9,5 @@ urlpatterns = [
     path('usuarioPadreFamilia/', include('usuarioPadreFamilia.urls')),
     path('crear-usuario/', views.crear_usuario, name='crear_usuario'),
     path('accounts/', include('django.contrib.auth.urls')),
-    path('salir/', views.salir, name="salir"),
+    #path('salir/', views.salir, name="salir"),
 ]
