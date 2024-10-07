@@ -30,5 +30,5 @@ def index_PadreFamilia(request):
     return render(request, 'index_PadreFamilia.html')
 
 def salir(request):
-    logout(request)
-    return redirect('/index')
+    logout(request)  # Esto cierra la sesión del usuario
+    return redirect('/')  # Redirige a la página de inicio u otra página
