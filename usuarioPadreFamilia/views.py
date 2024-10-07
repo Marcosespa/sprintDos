@@ -28,3 +28,7 @@ def index(request):
 def index_PadreFamilia(request):
     # Lógica de la vista
     return render(request, 'index_PadreFamilia.html')
+
+def salir(request):
+    logout(request)
+    return redirect('/')
