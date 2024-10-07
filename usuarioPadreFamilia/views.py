@@ -31,4 +31,4 @@ def index_PadreFamilia(request):
 
 def salir(request):
     logout(request)
-    return redirect('/')
+    return redirect('/index')
