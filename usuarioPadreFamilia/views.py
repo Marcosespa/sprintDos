@@ -4,7 +4,7 @@ from django.urls import reverse_lazy
 from django.shortcuts import redirect, render
 from django.views.generic.edit import UpdateView
 from usuarioPadreFamilia.models import UsuarioPadreFamilia
-
+from django.contrib.auth import logout
 
 class SimpleLoginView(LoginView):
     template_name = 'app/login.html'
