@@ -6,6 +6,7 @@ from .forms import PagoForm
 from usuarioPadreFamilia.models import UsuarioPadreFamilia
 from cronograma.models import Cronograma
 from pago.models import Pago
+from django.views.decorators.csrf import csrf_exempt
 
 # Vista de índice de cronograma
 @login_required
@@ -24,6 +25,7 @@ def cronograma_index(request):
 
 # Vista para agregar un nuevo pago
 @login_required
+@csrf_exempt
 def agregar_pago(request, cronograma_id):
     cronograma = get_object_or_404(Cronograma, id=cronograma_id)
 
