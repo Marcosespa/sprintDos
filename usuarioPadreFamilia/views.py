@@ -34,7 +34,7 @@ def salir(request):
     return redirect('/')  # Redirige a la página de inicio u otra página
 
 def cronograma(request):
-    return render(request, 'cronograma.html')
+    return render(request, 'cronograma_index.html')
 
 def pago(request):
     return render(request, 'procesar_pago.html')
