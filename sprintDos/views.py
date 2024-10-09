@@ -53,3 +53,5 @@ def crear_usuario(request):
 @login_required
 def index_PadreFamilia(request):
     return render(request, 'index_PadreFamilia.html')
+def healthCheck(request):
+    return HttpResponse('ok')
