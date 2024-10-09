@@ -59,21 +59,22 @@
                 </tr>
             </thead>
             <tbody>
-                {% for item in cronograma_list %}
+                {% for cronograma in cronogramas %}
                     <tr>
-                        <td>{{ item.cronograma.mes }}</td>
-                        <td>{{ item.cronograma.valor_total }}</td>
-                        <td>
-                            {% if item.pagos.exists %}
-                                {{ item.pagos.first.estado_pago }}
-                            {% else %}
-                                Sin pagos registrados
-                            {% endif %}
-                        </td>
+                        <td colspan="3"><strong>Cronograma:</strong> {{ cronograma.fecha_inicio }} - {{ cronograma.fecha_fin }}</td>
                     </tr>
+                    {% for pago in pagos %}
+                        {% if pago.cronograma == cronograma %}
+                            <tr>
+                                <td>{{ pago.fecha_pago|date:"F" }}</td>
+                                <td>{{ pago.valor_pago }}</td>
+                                <td>{{ pago.estado_pago }}</td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
                 {% empty %}
                     <tr>
-                        <td colspan="3">No hay cronogramas disponibles.</td>
+                        <td colspan="3">No hay pagos disponibles para este cronograma.</td>
                     </tr>
                 {% endfor %}
             </tbody>
