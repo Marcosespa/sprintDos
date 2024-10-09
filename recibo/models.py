@@ -1,6 +1,5 @@
 from django.db import models
 
-# Create your models here.
 class Recibo(models.Model):
     ESTADO_RECIBO_CHOICES = [
         ('VENCIDO', 'Vencido'),
@@ -9,7 +8,6 @@ class Recibo(models.Model):
     ]
 
     id_recibo = models.IntegerField(default=0)
-
     fecha_emision = models.DateField()
     codigo_barras = models.CharField(max_length=100, unique=True)
     estado = models.CharField(max_length=10, choices=ESTADO_RECIBO_CHOICES, default='POR PAGAR')
