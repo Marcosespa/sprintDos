@@ -6,8 +6,11 @@ def cronograma_index(request):
     return render(request, 'cronograma_index.html', {'cronogramas': cronogramas})
 
 def cronograma_list(request):
-    Cronogramas = get_cronogramas()
+    cronogramas = [
+        {'mes': 'Enero', 'valor_total': 150000, 'estado_pago': 'Pagado'},
+        {'mes': 'Febrero', 'valor_total': 150000, 'estado_pago': 'Pendiente'}
+    ]
     context = {
-        'cronograma_list': Cronogramas
+        'cronograma_list': cronogramas
     }
     return render(request, 'cronograma_index.html', context)
