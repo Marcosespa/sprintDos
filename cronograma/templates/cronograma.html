@@ -2,43 +2,49 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Cronograma de Pagos</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cronograma Detallado</title>
+    <style>
+        /* Estilos similares a los que ya has utilizado */
+    </style>
 </head>
 <body>
-    <h1>Cronograma de Pagos</h1>
-    <ul>
-        {% for cronograma in cronogramas %}
-            <li>Mes: {{ cronograma.mes }} - Valor Total: {{ cronograma.valor_total }}</li>
-        {% empty %}
-            <li>No hay cronogramas disponibles.</li>
-        {% endfor %}
-    </ul>
-    <h2>Pagos para el cronograma: {{ cronograma.mes }} - Valor total: {{ cronograma.valor_total }}</h2>
-<table>
-    <thead>
-        <tr>
-            <th>Nombre del Pago</th>
-            <th>Fecha del Pago</th>
-            <th>Valor</th>
-            <th>Estado</th>
-            <th>Tipo</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for pago in pagos %}
-        <tr>
-            <td>{{ pago.nombre_pago }}</td>
-            <td>{{ pago.fecha_pago }}</td>
-            <td>{{ pago.valor_pago }}</td>
-            <td>{{ pago.estado_pago }}</td>
-            <td>{{ pago.tipo_pago }}</td>
-        </tr>
-        {% empty %}
-        <tr>
-            <td colspan="5">No hay pagos asociados a este cronograma.</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+    <header>
+        <h1>Cronograma Detallado - {{ cronograma.mes }}</h1>
+    </header>
+    <main>
+        <section>
+            <h2>Pagos Asociados</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nombre del Pago</th>
+                        <th>Fecha del Pago</th>
+                        <th>Valor</th>
+                        <th>Estado</th>
+                        <th>Tipo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for pago in pagos %}
+                    <tr>
+                        <td>{{ pago.nombre_pago }}</td>
+                        <td>{{ pago.fecha_pago }}</td>
+                        <td>{{ pago.valor_pago }}</td>
+                        <td>{{ pago.estado_pago }}</td>
+                        <td>{{ pago.tipo_pago }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5">No hay pagos asociados a este cronograma.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+    </main>
+    <footer>
+        <a href="{% url 'index_PadreFamilia' %}">Volver a la página principal</a>
+    </footer>
 </body>
 </html>

@@ -47,18 +47,17 @@ def pago(request):
 
 def pagos_filtrados(request):
     if request.method == "POST":
-        # Obtener los datos del formulario
-        mes = request.POST.get('mes')
+        # Obtener el ID del cronograma desde el formulario
         cronograma_id = request.POST.get('cronograma_id')
 
         # Obtener el cronograma específico
         cronograma = get_object_or_404(Cronograma, id=cronograma_id)
 
-        # Filtrar los pagos por el mes y el cronograma
-        pagos = Pago.objects.filter(fecha_pago__month=mes, cronograma=cronograma)
+        # Filtrar los pagos asociados al cronograma
+        pagos = Pago.objects.filter(cronograma=cronograma)
 
         # Renderizar la vista con los pagos filtrados
-        return render(request, 'cronograma.html', {'cronograma': cronograma, 'pagos': pagos, 'mes': mes})
+        return render(request, 'cronograma.html', {'cronograma': cronograma, 'pagos': pagos})
 
     # Si es un GET o algo inesperado, redirigir a la página de consulta
-    return render(request, 'consulta_cronograma.html') 
+    return render(request, 'consulta_cronograma.html')

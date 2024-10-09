@@ -129,40 +129,35 @@
         <section>
             <h2>Información Importante</h2>
             <p>Aquí puedes encontrar información relevante para padres de familia, como detalles de pagos, actividades y más.</p>
-            <p>PIPEE</p>
         </section>
-
         
         <div class="botones-adicionales">
             <div class="botones-adicionales">
 
-                <a href="{% url 'cronograma_index' %}"><button>Cronograma</button></a>
-                <a href="{% url 'procesar_pago' %}"><button>Pago</button></a>
+                <!-- <a href="{% url 'cronograma_index' %}"><button>Cronograma</button></a>
+                <a href="{% url 'procesar_pago' %}"><button>Pago</button></a> -->
 
-                <!-- <form method="POST" action="{% url 'pagos_filtrados' %}">
+                <h2>Consultar cronogramas</h2>
+                <form method="POST" action="{% url 'pagos_filtrados' %}">
                     {% csrf_token %}
-                    <label for="cronograma">Seleccione el cronograma:</label>
+                    <label for="cronograma">Seleccione el cronograma que desea consultar:</label>
+                    <br>
+                    <label for="cronograma">Mes:</label>
                     <select id="cronograma" name="cronograma_id" required>
                         {% for cronograma in cronogramas %}
                             <option value="{{ cronograma.id }}">{{ cronograma.mes }} </option>
                         {% endfor %}
                     </select>
-                
-                    <label for="mes">Ingrese el número del mes que desea consultar:</label>
-                    <input type="text" id="mes" name="mes" required>
-                
                     <button type="submit">Consultar</button>
-                </form> -->
-                <select style="width: 100%; padding: 10px; font-size: 16px;">
-                    {% for cronograma in cronogramas %}
-                        <option value="{{ cronograma.id }}">{{ cronograma.mes }} </option>
-                    {% endfor %}
-                </select>
+                </form>
+
                 
             </div>
+            <h2>Hacer pagos</h2>
             <a href="{% url 'procesar_pago' %}"><button>Pago</button></a>
         </div>
     </main>
+
 
     <footer>
         <a href="{% url 'salir' %}"><button>Salir de la sesión</button></a>
