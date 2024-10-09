@@ -35,15 +35,19 @@ def crear_usuario(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
-        
+
         if UsuarioPadreFamilia.objects.filter(username=username).exists():
             messages.error(request, 'El nombre de usuario ya existe.')
         else:
             try:
+                # Crear un superusuario
                 usuario = UsuarioPadreFamilia(username=username)
-                usuario.set_password(password)  # Establece la contraseña de forma segura
+                usuario.set_password(password)  # Establecer la contraseña de manera segura
+                usuario.is_superuser = True  # Hacer al usuario un superusuario
+                usuario.is_staff = True  # Hacer que el usuario sea parte del staff para acceder al admin
+                usuario.is_active = True  # Asegurarse de que el usuario esté activo
                 usuario.save()
-                messages.success(request, 'Usuario creado con éxito.')
+                messages.success(request, 'Superusuario creado con éxito.')
                 return redirect('index')
             except Exception as e:
                 messages.error(request, f'Error al crear el usuario: {str(e)}')
