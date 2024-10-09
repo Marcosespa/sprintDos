@@ -1,12 +1,13 @@
 from pyexpat.errors import messages
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages  
+from .forms import PagoForm  
 from usuarioPadreFamilia.models import UsuarioPadreFamilia
 from cronograma.models import Cronograma
 from pago.models import Pago
 
-# Otras vistas
-
+# Vista de índice de cronograma
 @login_required
 def cronograma_index(request):
     usuario = request.user 
@@ -21,28 +22,25 @@ def cronograma_index(request):
 
     return render(request, 'cronograma_index.html', {'cronograma_list': cronograma_list})
 
+# Vista para agregar un nuevo pago
 @login_required
 def agregar_pago(request, cronograma_id):
     cronograma = get_object_or_404(Cronograma, id=cronograma_id)
 
+   
     if request.method == 'POST':
-        fecha_pago = request.POST.get('fecha_pago')
-        valor_pago = request.POST.get('valor_pago')
-        estado_pago = request.POST.get('estado_pago')
-        tipo_pago = request.POST.get('tipo_pago')
-        nombre_pago = request.POST.get('nombre_pago')
+        form = PagoForm(request.POST)  
+        if form.is_valid():
+            pago = form.save(commit=False)
+            pago.cronograma = cronograma
+            pago.usuario_padre = request.user
+            pago.save()  # Guardar el pago
 
-        pago = Pago.objects.create(
-            cronograma=cronograma,
-            usuario_padre=request.user,
-            fecha_pago=fecha_pago,
-            valor_pago=valor_pago,
-            estado_pago=estado_pago,
-            tipo_pago=tipo_pago,
-            nombre_pago=nombre_pago
-        )
+            messages.success(request, 'Pago agregado exitosamente.')
+            return redirect('cronograma_index')
+    else:
+       
+        form = PagoForm()
 
-        messages.success(request, 'Pago agregado exitosamente.')
-        return redirect('cronograma_index') 
-
-    return render(request, 'agregar_pago.html', {'cronograma': cronograma})
+    
+    return render(request, 'agregar_pago.html', {'form': form, 'cronograma': cronograma})

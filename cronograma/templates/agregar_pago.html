@@ -5,30 +5,40 @@
 
 <form method="POST">
     {% csrf_token %}
+
     
-    <label for="fecha_pago">Fecha de Pago:</label>
-    <input type="date" name="fecha_pago" required>
-    <br>
-    
-    <label for="valor_pago">Valor de Pago:</label>
-    <input type="number" step="0.01" name="valor_pago" required>
+    <label for="{{ form.fecha_pago.id_for_label }}">Fecha de Pago:</label>
+    <input type="date" name="fecha_pago" value="{{ form.fecha_pago.value }}" required>
+    {{ form.fecha_pago.errors }}  
     <br>
 
+ 
+    <label for="{{ form.valor_pago.id_for_label }}">Valor de Pago:</label>
+    <input type="number" step="0.01" name="valor_pago" value="{{ form.valor_pago.value }}" required>
+    {{ form.valor_pago.errors }} 
+    <br>
+
+    
     <label for="estado_pago">Estado de Pago:</label>
     <select name="estado_pago" required>
-        <option value="COMPLETADO">Completado</option>
-        <option value="PENDIENTE">Pendiente</option>
-        <option value="CANCELADO">Cancelado</option>
-        <option value="RECHAZADO">Rechazado</option>
+        <option value="COMPLETADO" {% if form.estado_pago.value == "COMPLETADO" %}selected{% endif %}>Completado</option>
+        <option value="PENDIENTE" {% if form.estado_pago.value == "PENDIENTE" %}selected{% endif %}>Pendiente</option>
+        <option value="CANCELADO" {% if form.estado_pago.value == "CANCELADO" %}selected{% endif %}>Cancelado</option>
+        <option value="RECHAZADO" {% if form.estado_pago.value == "RECHAZADO" %}selected{% endif %}>Rechazado</option>
     </select>
-    <br>
-    
-    <label for="tipo_pago">Tipo de Pago:</label>
-    <input type="text" name="tipo_pago" required>
+    {{ form.estado_pago.errors }}  
     <br>
 
-    <label for="nombre_pago">Nombre del Pago:</label>
-    <input type="text" name="nombre_pago" value="Pago genérico" required>
+    
+    <label for="{{ form.tipo_pago.id_for_label }}">Tipo de Pago:</label>
+    <input type="text" name="tipo_pago" value="{{ form.tipo_pago.value }}" required>
+    {{ form.tipo_pago.errors }}  
+    <br>
+
+    
+    <label for="{{ form.nombre_pago.id_for_label }}">Nombre del Pago:</label>
+    <input type="text" name="nombre_pago" value="{{ form.nombre_pago.value|default:"Pago genérico" }}" required>
+    {{ form.nombre_pago.errors }}  
     <br>
 
     <button type="submit">Agregar Pago</button>
