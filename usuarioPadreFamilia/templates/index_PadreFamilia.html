@@ -63,6 +63,27 @@
             border-radius: 8px;
         }
 
+        /* Botones adicionales */
+        .botones-adicionales {
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .botones-adicionales a button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin: 0 10px;
+        }
+
+        .botones-adicionales a button:hover {
+            background-color: #45a049;
+        }
+
         footer {
             background-color: #333;
             color: white;
@@ -110,6 +131,12 @@
             <p>Aquí puedes encontrar información relevante para padres de familia, como detalles de pagos, actividades y más.</p>
             <p>PIPEE</p>
         </section>
+
+        <!-- Botones adicionales -->
+        <div class="botones-adicionales">
+            <a href="{% url 'cronograma' %}"><button>Cronograma</button></a>
+            <a href="{% url 'pago' %}"><button>Pago</button></a>
+        </div>
     </main>
 
     <footer>
