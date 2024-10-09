@@ -36,7 +36,7 @@ def crear_usuario(request):
         username = request.POST.get('username')
         password = request.POST.get('password')
         
-        if UsuarioPadreFamilia.objects.filter(username=username).exists():
+        if User.objects.filter(username=username).exists():
             messages.error(request, 'El nombre de usuario ya existe.')
         else:
             try:
