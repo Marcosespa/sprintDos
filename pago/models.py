@@ -15,7 +15,7 @@ class Pago(models.Model):
     id_pago = models.IntegerField(default=0)
     fecha_pago = models.DateField()
     valor_pago = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-    estado_pago = models.CharField(max_length=20, default='pendiente')
+    #estado_pago = models.CharField(max_length=20, default='pendiente')
     tipo_pago = models.CharField(max_length=100, default="pendiente")
     nombre_pago = models.CharField(max_length=100, default="Pago genérico")
     descuentos = models.ManyToManyField(Descuento, related_name ='pagos_cronograma') 
