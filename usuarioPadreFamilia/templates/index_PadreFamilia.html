@@ -149,11 +149,11 @@
                 
                     <button type="submit">Consultar</button>
                 </form> -->
-                <ul>
+                <select>
                     {% for cronograma in cronogramas %}
-                        <li>{{ cronograma.mes }} - ID: {{ cronograma.id }}</li>
+                        <option value="{{ cronograma.id }}">{{ cronograma.mes }} </option>
                     {% endfor %}
-                </ul>
+                </select>
                 
             </div>
             <a href="{% url 'procesar_pago' %}"><button>Pago</button></a>
