@@ -149,7 +149,7 @@
                 
                     <button type="submit">Consultar</button>
                 </form> -->
-                <select>
+                <select style="width: 100%; padding: 10px; font-size: 16px;">
                     {% for cronograma in cronogramas %}
                         <option value="{{ cronograma.id }}">{{ cronograma.mes }} </option>
                     {% endfor %}
