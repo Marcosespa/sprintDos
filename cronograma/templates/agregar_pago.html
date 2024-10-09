@@ -5,8 +5,6 @@
 
 <form method="POST">
     {% csrf_token %}
-
-    
     <label for="{{ form.fecha_pago.id_for_label }}">Fecha de Pago:</label>
     <input type="date" name="fecha_pago" value="{{ form.fecha_pago.value }}" required>
     {{ form.fecha_pago.errors }}  

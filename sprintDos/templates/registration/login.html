@@ -60,7 +60,7 @@
             {% endfor %}
         {% endif %}
         <form method="POST">
-            {% comment %} {% csrf_token %} {% endcomment %}
+            {% csrf_token %}
             <label for="username">Usuario:</label>
             <input type="text" id="username" name="username" required>
 
