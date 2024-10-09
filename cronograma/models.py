@@ -7,16 +7,7 @@ from usuarioPadreFamilia.models import UsuarioPadreFamilia
 class Cronograma(models.Model):
     mes = models.CharField(max_length=20)
     valor_total = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-    estado_pago = models.CharField(
-        max_length=20,
-        choices=[
-            ('COMPLETADO', 'Completado'),
-            ('PENDIENTE', 'Pendiente'),
-            ('CANCELADO', 'Cancelado'),
-            ('RECHAZADO', 'Rechazado')
-        ],
-        default='PENDIENTE'
-    )
+    estado_pago = models.CharField(max_length=20, default='PENDIENTE')
     usuario_padre = models.ForeignKey(UsuarioPadreFamilia, on_delete=models.CASCADE)
     
     def __str__(self):
