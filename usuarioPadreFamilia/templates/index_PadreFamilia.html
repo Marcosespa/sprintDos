@@ -135,6 +135,10 @@
         
         <div class="botones-adicionales">
             <div class="botones-adicionales">
+
+                <a href="{% url 'cronograma_index' %}"><button>Cronograma</button></a>
+                <a href="{% url 'procesar_pago' %}"><button>Pago</button></a>
+
                 <!-- <form method="POST" action="{% url 'pagos_filtrados' %}">
                     {% csrf_token %}
                     <label for="cronograma">Seleccione el cronograma:</label>
