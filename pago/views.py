@@ -17,6 +17,3 @@ def procesar_pago(request):
         messages.success(request, 'Pago procesado exitosamente.')
         return redirect('usuarioPadreFamilia/index_PadreFamilia')  
     return render(request, 'procesar_pago.html')
-def usuario_padre_familia_edit_view(request):
-    # Lógica de la vista
-    return render(request, 'pago/editar_usuario.html')

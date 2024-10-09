@@ -18,10 +18,10 @@ class Pago(models.Model):
     estado_pago = models.CharField(max_length=100, default="")
     tipo_pago = models.CharField(max_length=100, default="")
     nombre_pago = models.CharField(max_length=100, default="Pago genérico")
-    descuentos = models.ManyToManyField(Descuento, related_name='pagos_cronograma')  # Cambia aquí
-    recibo = models.OneToOneField(Recibo, null=True, blank=True, on_delete=models.CASCADE, related_name='pago_cronograma')  # Cambia aquí
-    cronograma = models.ForeignKey(Cronograma, on_delete=models.CASCADE, null=True, blank=True, related_name='pagos')  # Cambia aquí
-    usuario_padre = models.ForeignKey(UsuarioPadreFamilia, on_delete=models.CASCADE, null=True, blank=True, related_name='pagos_cronograma')  # Cambia aquí
+    descuentos = models.ManyToManyField(Descuento, related_name='pagos_cronograma') 
+    recibo = models.OneToOneField(Recibo, null=True, blank=True, on_delete=models.CASCADE, related_name='pago_cronograma')
+    cronograma = models.ForeignKey(Cronograma, on_delete=models.CASCADE, null=True, blank=True, related_name='pagos_pago')
+    usuario_padre = models.ForeignKey(UsuarioPadreFamilia, on_delete=models.CASCADE, null=True, blank=True, related_name='pagos_cronograma')  
 
     def __str__(self):
         return f"Pago de {self.nombre_pago} - {self.valor_pago}"
