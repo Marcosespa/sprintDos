@@ -5,6 +5,8 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from usuarioPadreFamilia.models import UsuarioPadreFamilia
+from django.contrib.auth.models import User  # Importar el modelo de usuario predeterminado de Django
+
 
 @login_required
 def index(request):
