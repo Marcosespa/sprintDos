@@ -19,16 +19,15 @@ class Cronograma(models.Model):
         return f"{self.mes} - {self.estado_pago}"
 
 class Pago(models.Model):
-    ESTADO_PAGO_CHOICES = [
-        ('COMPLETADO', 'Completado'),
-        ('PENDIENTE', 'Pendiente'),
-        ('CANCELADO', 'Cancelado'),
-        ('RECHAZADO', 'Rechazado'),
-    ]
 
     fecha_pago = models.DateField()
     valor_pago = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-    estado_pago = models.CharField(max_length=100, default="")
+    estado_pago = models.CharField(max_length=20, choices=[
+    ('COMPLETADO', 'Completado'),
+    ('PENDIENTE', 'Pendiente'),
+    ('CANCELADO', 'Cancelado'),
+    ('RECHAZADO', 'Rechazado')
+], default='PENDIENTE')
     tipo_pago = models.CharField(max_length=100, default="")
     nombre_pago = models.CharField(max_length=100, default="Pago genérico")
     

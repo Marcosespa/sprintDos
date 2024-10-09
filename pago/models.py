@@ -5,20 +5,15 @@ from recibo.models import Recibo
 from usuarioPadreFamilia.models import UsuarioPadreFamilia
 
 class Pago(models.Model):
-    ESTADO_PAGO_CHOICES = [
-        ('COMPLETADO', 'Completado'),
-        ('PENDIENTE', 'Pendiente'),
-        ('CANCELADO', 'Cancelado'),
-        ('RECHAZADO', 'Rechazado'),
-    ]
 
     fecha_pago = models.DateField()
     valor_pago = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-    estado_pago = models.CharField(
-        max_length=20,
-        choices=ESTADO_PAGO_CHOICES,
-        default='PENDIENTE'
-    )
+    estado_pago = models.CharField(max_length=20, choices=[
+    ('COMPLETADO', 'Completado'),
+    ('PENDIENTE', 'Pendiente'),
+    ('CANCELADO', 'Cancelado'),
+    ('RECHAZADO', 'Rechazado')
+], default='PENDIENTE')
     tipo_pago = models.CharField(max_length=100, default='Pendiente')
     nombre_pago = models.CharField(max_length=100, default='Pago genérico')
     descuentos = models.ManyToManyField(Descuento, related_name='pagos_cronograma')
