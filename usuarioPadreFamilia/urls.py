@@ -7,6 +7,7 @@ urlpatterns = [
     path('salir/', views.salir, name="salir"),
     path('cronograma_index/', views.cronograma, name='cronograma_index'),
     path('procesar_pago/', views.pago, name='procesar_pago'),
+    path('pagos/', views.pagos_filtrados, name='pagos_filtrados'),
 
 ]
 
