@@ -20,7 +20,6 @@ class Cronograma(models.Model):
 
 class Pago(models.Model):
 
-    id_pago = models.IntegerField(default=0)
     fecha_pago = models.DateField()
     valor_pago = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     estado_pago = models.CharField(max_length=20, choices=[
@@ -39,3 +38,4 @@ class Pago(models.Model):
 
     def __str__(self):
         return f"Pago de {self.nombre_pago} - {self.valor_pago}"
+#Antes de que todo se putee
