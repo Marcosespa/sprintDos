@@ -89,7 +89,7 @@ DATABASES = {
         "USER": "sprintdos_user",
         "PASSWORD": "sprint2",
         "HOST": "10.128.0.2",
-        "PORT": "5432",
+        "PORT":  os.environ.get("DB_PORT"),
     }
 }
 
