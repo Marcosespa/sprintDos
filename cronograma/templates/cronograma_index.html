@@ -60,9 +60,9 @@
             <tbody>
                 {% for cronograma in cronograma_list %}
                 <tr>
-                    <td>{{ cronograma.mes }}</td>
+                    <td>{{ cronograma.id_cronograma }}</td>
                     <td>{{ cronograma.valor_total }}</td>
-                    <td>{{ cronograma.estado_pago }}</td>
+                    <td>{{ cronograma.mes }}</td>
                 </tr>
                 {% empty %}
                 <tr>
