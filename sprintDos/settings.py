@@ -93,7 +93,7 @@ DATABASES = {
     }
 }
 
-AUTH_USER_MODEL = 'usuarioPadreFamilia.UsuarioPadreFamilia' 
+#AUTH_USER_MODEL = 'usuarioPadreFamilia.UsuarioPadreFamilia' 
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
