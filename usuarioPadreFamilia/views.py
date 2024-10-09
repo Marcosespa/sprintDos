@@ -35,3 +35,8 @@ def salir(request):
 
 def cronograma(request):
     return render(request, 'cronograma.html')
+
+def pago(request):
+    return render(request, 'procesar_pago.html')
+
+    

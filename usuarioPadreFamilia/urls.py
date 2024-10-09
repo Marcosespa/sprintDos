@@ -6,6 +6,7 @@ urlpatterns = [
     path('index_PadreFamilia/', views.index_PadreFamilia, name='index_PadreFamilia'),  # Ruta dentro de 'usuarioPadreFamilia'
     path('salir/', views.salir, name="salir"),
     path('cronograma/', views.cronograma, name='cronograma'),
+    path('procesar_pago/', views.pago, name='procesar_pago'),
 
 ]
 
