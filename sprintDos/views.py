@@ -7,10 +7,11 @@ from django.contrib import messages
 from usuarioPadreFamilia.models import UsuarioPadreFamilia
 from django.contrib.auth.models import User  # Importar el modelo de usuario predeterminado de Django
 from django.views.decorators.csrf import csrf_protect
+from django.views.decorators.csrf import csrf_exempt
 
 
 @login_required
-#@csrf_protect  # No estoy seguro
+@csrf_exempt
 def index(request):
     
     return render(request, 'index_PadreFamilia.html')
