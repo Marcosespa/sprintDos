@@ -5,6 +5,7 @@ from django.shortcuts import redirect, render
 from django.views.generic.edit import UpdateView
 from usuarioPadreFamilia.models import UsuarioPadreFamilia
 from django.contrib.auth import logout
+from cronograma.models import Cronograma
 
 class SimpleLoginView(LoginView):
     template_name = 'app/login.html'
@@ -27,7 +28,8 @@ def index(request):
 
 def index_PadreFamilia(request):
     # Lógica de la vista
-    return render(request, 'index_PadreFamilia.html')
+    cronogramas = Cronograma.objects.all()
+    return render(request, 'index_PadreFamilia.html', {'cronogramas': cronogramas})
 
 def salir(request):
     logout(request)  # Esto cierra la sesión del usuario
@@ -39,4 +41,4 @@ def cronograma(request):
 def pago(request):
     return render(request, 'procesar_pago.html')
 
-    
+
