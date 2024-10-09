@@ -40,3 +40,4 @@ class Pago(models.Model):
 
     def __str__(self):
         return f"Pago de {self.nombre_pago} - {self.valor_pago}"
+#Antes de que todo se putee
