@@ -1,4 +1,3 @@
-<!-- cronograma_index.html -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -49,7 +48,7 @@
         <h1>Cronograma de Pagos</h1>
     </header>
     <div class="container">
-        <h2>Cronograma de Pagos del Usuario</h2>
+        <h2>Cronograma de Pagos del Estudiante</h2>
         <table>
             <thead>
                 <tr>
@@ -59,23 +58,16 @@
                 </tr>
             </thead>
             <tbody>
-                {% for cronograma in cronogramas %}
-                    <tr>
-                        <td colspan="3"><strong>Cronograma:</strong> {{ cronograma.fecha_inicio }} - {{ cronograma.fecha_fin }}</td>
-                    </tr>
-                    {% for pago in pagos %}
-                        {% if pago.cronograma == cronograma %}
-                            <tr>
-                                <td>{{ pago.fecha_pago|date:"F" }}</td>
-                                <td>{{ pago.valor_pago }}</td>
-                                <td>{{ pago.estado_pago }}</td>
-                            </tr>
-                        {% endif %}
-                    {% endfor %}
+                {% for cronograma in cronograma_list %}
+                <tr>
+                    <td>{{ cronograma.mes }}</td>
+                    <td>{{ cronograma.valor_total }}</td>
+                    <td>{{ cronograma.estado_pago }}</td>
+                </tr>
                 {% empty %}
-                    <tr>
-                        <td colspan="3">No hay pagos disponibles para este cronograma.</td>
-                    </tr>
+                <tr>
+                    <td colspan="3">No hay cronogramas disponibles.</td>
+                </tr>
                 {% endfor %}
             </tbody>
         </table>
