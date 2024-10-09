@@ -1,48 +1,49 @@
-from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, Group, Permission
 from django.db import models
-from django.contrib.auth.models import BaseUserManager
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin, Group, Permission
 
 class UsuarioPadreFamiliaManager(BaseUserManager):
-    def create_user(self, email, password=None, **extra_fields):
-        if not email:
-            raise ValueError('El usuario debe tener un correo electrónico')
-        email = self.normalize_email(email)
-        user = self.model(email=email, **extra_fields)
+    def create_user(self, username, password=None, **extra_fields):
+        if not username:
+            raise ValueError('El nombre de usuario debe ser obligatorio')
+        user = self.model(username=username, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, email, password=None, **extra_fields):
+    def create_superuser(self, username, password=None, **extra_fields):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
-        return self.create_user(email, password, **extra_fields)
+
+        return self.create_user(username, password, **extra_fields)
 
 class UsuarioPadreFamilia(AbstractBaseUser, PermissionsMixin):
-    email = models.EmailField(unique=True)
-    nombre = models.CharField(max_length=30)
+    username = models.CharField(max_length=50, unique=True)
+    descripcion = models.CharField(max_length=255, default='Sin descripción')
+    password = models.CharField(max_length=128, default='default_password')  # Agrega un valor por defecto
+    estudiante_relacionado = models.CharField(max_length=100, default='No reconocido')
+
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
 
-    # Agregar related_name para evitar el conflicto con auth.User
     groups = models.ManyToManyField(
         Group,
-        related_name='usuarioPadreFamilia_set',  # Cambiar related_name
+        related_name='usuario_padrefamilia_set',  # Evita el conflicto de nombres
         blank=True,
-        help_text='Los grupos a los que pertenece el usuario.',
-        verbose_name='grupos'
+        help_text='The groups this user belongs to.',
+        verbose_name='groups',
     )
     user_permissions = models.ManyToManyField(
         Permission,
-        related_name='usuarioPadreFamilia_permissions',  # Cambiar related_name
+        related_name='usuario_padrefamilia_permissions_set',  # Evita el conflicto de nombres
         blank=True,
-        help_text='Permisos específicos para este usuario.',
-        verbose_name='permisos de usuario'
+        help_text='Specific permissions for this user.',
+        verbose_name='user permissions',
     )
 
     objects = UsuarioPadreFamiliaManager()
 
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['nombre']
+    USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS = []
 
     def __str__(self):
-        return self.email
+        return self.username
