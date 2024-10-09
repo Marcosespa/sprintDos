@@ -10,9 +10,7 @@ def cronograma_index(request):
 
 def cronograma_list(request):
     cronogramas = [
-        {'id_cronograma': '12', 'valor_total': 150000, 'mes': '1'},
-        {'id_cronograma': '22', 'valor_total': 150000, 'mes': '2'}
-    ]
+        {'id_cronograma': '12', 'valor_total': 150000, 'mes': '1'}    ]
     context = {
         'cronograma_list': cronogramas
     }
