@@ -32,3 +32,6 @@ def index_PadreFamilia(request):
 def salir(request):
     logout(request)  # Esto cierra la sesión del usuario
     return redirect('/')  # Redirige a la página de inicio u otra página
+
+def cronograma(request):
+    return render(request, 'cronograma.html')
