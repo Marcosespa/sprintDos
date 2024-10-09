@@ -135,6 +135,7 @@
             <div class="botones-adicionales">
                 <h2>Consultar cronogramas</h2>
                 <form method="POST" action="{% url 'pagos_filtrados' %}">
+                    {% csrf_token %}
                     <label for="cronograma">Seleccione el cronograma que desea consultar:</label>
                     <br>
                     <label for="cronograma">Mes:</label>
