@@ -12,7 +12,6 @@ class Pago(models.Model):
         ('RECHAZADO', 'Rechazado'),
     ]
 
-    id_pago = models.AutoField(primary_key=True)  # Cambié aquí a AutoField para generar automáticamente el ID.
     fecha_pago = models.DateField()
     valor_pago = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     estado_pago = models.CharField(
