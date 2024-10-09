@@ -58,16 +58,22 @@
                 </tr>
             </thead>
             <tbody>
-                {% for cronograma in cronograma_list %}
-                <tr>
-                    <td>{{ cronograma.mes }}</td>
-                    <td>{{ cronograma.valor_total }}</td>
-                    <td>{{ cronograma.estado_pago }}</td>
-                </tr>
+                {% for item in cronograma_list %}
+                    <tr>
+                        <td>{{ item.cronograma.mes }}</td>
+                        <td>{{ item.cronograma.valor_total }}</td>
+                        <td>
+                            {% if item.pagos.exists %}
+                                {{ item.pagos.first.estado_pago }}
+                            {% else %}
+                                Sin pagos registrados
+                            {% endif %}
+                        </td>
+                    </tr>
                 {% empty %}
-                <tr>
-                    <td colspan="3">No hay cronogramas disponibles.</td>
-                </tr>
+                    <tr>
+                        <td colspan="3">No hay cronogramas disponibles.</td>
+                    </tr>
                 {% endfor %}
             </tbody>
         </table>
