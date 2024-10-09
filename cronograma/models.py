@@ -17,7 +17,12 @@ class Cronograma(models.Model):
         ],
         default='PENDIENTE'
     )
-    usuario_padre = models.ForeignKey(UsuarioPadreFamilia, on_delete=models.CASCADE)
+    usuario_padre = models.ForeignKey(
+        UsuarioPadreFamilia,
+        on_delete=models.CASCADE,
+        null=True,  # Permitir temporalmente valores nulos
+        blank=True  # Permitir que el campo se deje vacío en formularios
+    )
     
     def __str__(self):
         return f"{self.mes} - {self.estado_pago}"
