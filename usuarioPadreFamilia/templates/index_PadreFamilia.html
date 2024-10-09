@@ -140,12 +140,12 @@
                     <label for="cronograma">Seleccione el cronograma:</label>
                     <select id="cronograma" name="cronograma_id" required>
                         {% for cronograma in cronogramas %}
-                            <option value="{{ cronograma.id }}">{{ cronograma.mes }} - Valor total: {{ cronograma.valor_total }}</option>
+                            <option value="{{ cronograma.id }}">{{ cronograma.mes }} </option>
                         {% endfor %}
                     </select>
                 
-                    <label for="mes">Ingrese el número del mes que desea consultar:</label>
-                    <input type="text" id="mes" name="mes" required>
+                    <!-- <label for="mes">Ingrese el número del mes que desea consultar:</label>
+                    <input type="text" id="mes" name="mes" required> -->
                 
                     <button type="submit">Consultar</button>
                 </form>
