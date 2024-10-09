@@ -11,7 +11,6 @@ from django.views.decorators.csrf import csrf_exempt
 
 
 @login_required
-@csrf_exempt
 def index(request):
     
     return render(request, 'index_PadreFamilia.html')
