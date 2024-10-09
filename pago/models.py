@@ -18,7 +18,7 @@ class Pago(models.Model):
     estado_pago = models.CharField(max_length=20, default='pendiente')
     tipo_pago = models.CharField(max_length=100, default="pendiente")
     nombre_pago = models.CharField(max_length=100, default="Pago genérico")
-    descuentos = models.ManyToManyField(Descuento, related_name='pagos_cronograma') 
+    descuentos = models.ManyToManyField(Descuento, related_name ='pagos_cronograma') 
     recibo = models.OneToOneField(Recibo, null=True, blank=True, on_delete=models.CASCADE, related_name='pago_pago')  # Cambié aquí
     cronograma = models.ForeignKey(Cronograma, on_delete=models.CASCADE, null=True, blank=True, related_name='pagos_asociados_pago')  # Cambié aquí
     usuario_padre = models.ForeignKey(UsuarioPadreFamilia, on_delete=models.CASCADE, null=True, blank=True, related_name='pagos_asociados_pago')  # Cambié aquí
