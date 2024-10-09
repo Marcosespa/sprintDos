@@ -135,7 +135,7 @@
         
         <div class="botones-adicionales">
             <div class="botones-adicionales">
-                <form method="POST" action="{% url 'pagos_filtrados' %}">
+                <!-- <form method="POST" action="{% url 'pagos_filtrados' %}">
                     {% csrf_token %}
                     <label for="cronograma">Seleccione el cronograma:</label>
                     <select id="cronograma" name="cronograma_id" required>
@@ -144,11 +144,17 @@
                         {% endfor %}
                     </select>
                 
-                    <!-- <label for="mes">Ingrese el número del mes que desea consultar:</label>
-                    <input type="text" id="mes" name="mes" required> -->
+                    <label for="mes">Ingrese el número del mes que desea consultar:</label>
+                    <input type="text" id="mes" name="mes" required>
                 
                     <button type="submit">Consultar</button>
-                </form>
+                </form> -->
+                <ul>
+                    {% for cronograma in cronogramas %}
+                        <li>{{ cronograma.mes }} - ID: {{ cronograma.id }}</li>
+                    {% endfor %}
+                </ul>
+                
             </div>
             <a href="{% url 'procesar_pago' %}"><button>Pago</button></a>
         </div>
