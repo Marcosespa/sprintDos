@@ -64,11 +64,11 @@
                     <td>{{ cronograma.valor_total }}</td>
                     <td>{{ cronograma.estado_pago }}</td>
                 </tr>
-                {% endfor %}
                 {% empty %}
                 <tr>
                     <td colspan="3">No hay cronogramas disponibles.</td>
                 </tr>
+                {% endfor %}
             </tbody>
         </table>
     </div>
