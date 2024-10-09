@@ -6,7 +6,7 @@ from pago.models import Pago
 
 def cronograma_index(request):
     cronogramas = Cronograma.objects.all() 
-    return render(request, 'cronograma_index.html', {'cronogramas': cronogramas})
+    return render(request, 'cronograma_index.html', {'cronograma_list': cronogramas})
 
 def cronograma_list(request):
     cronogramas = [
