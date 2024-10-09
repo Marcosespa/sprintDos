@@ -4,6 +4,94 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Página Principal - Usuario Padre de Familia</title>
+    <style>
+        /* Estilos generales */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        nav {
+            background-color: #333;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav ul li {
+            display: inline;
+            margin-right: 10px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 0.5rem 1rem;
+            background-color: #4CAF50;
+            border-radius: 5px;
+        }
+
+        nav ul li a:hover {
+            background-color: #45a049;
+        }
+
+        main {
+            padding: 2rem;
+        }
+
+        section {
+            background-color: white;
+            padding: 2rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        footer button {
+            background-color: #f44336;
+            color: white;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        footer button:hover {
+            background-color: #d32f2f;
+        }
+
+        footer p {
+            margin: 1rem 0 0 0;
+            font-size: 0.9rem;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -21,12 +109,11 @@
             <h2>Información Importante</h2>
             <p>Aquí puedes encontrar información relevante para padres de familia, como detalles de pagos, actividades y más.</p>
             <p>PIPEE</p>
-
         </section>
     </main>
 
     <footer>
-        <a href="{% url 'salir' %}"><button>Salir de la sesion</button></a>
+        <a href="{% url 'salir' %}"><button>Salir de la sesión</button></a>
         <p>&copy; 2024 - Sistema de Usuarios de Padres de Familia</p>
     </footer>
 </body>
