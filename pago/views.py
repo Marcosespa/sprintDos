@@ -18,7 +18,7 @@ def procesar_pago(request):
             return redirect('procesar_pago')
 
         try:
-            valor_pago = float(valor_pago)  # Asegurarse de que el valor sea un número válido
+            valor_pago = float(valor_pago) 
         except ValueError:
             messages.error(request, 'El valor del pago debe ser un número válido.')
             return redirect('procesar_pago')
