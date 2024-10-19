@@ -9,6 +9,7 @@ from django.contrib.auth.models import User
 @login_required
 def procesar_pago(request):
     if request.method == 'POST':
+
         valor_pago = request.POST.get('valor_pago')
         tipo_pago = request.POST.get('tipo_pago')
 
