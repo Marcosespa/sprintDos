@@ -56,31 +56,18 @@
     <div class="container">
         <form method="POST">
             {% csrf_token %}
+            <label for="nombre_pago">Nombre del Pago:</label>
+            <input type="text" id="nombre_pago" name="nombre_pago" required>
+
             <label for="valor_pago">Valor del Pago:</label>
-            <input type="text" id="valor_pago" name="valor_pago">
-            
+            <input type="number" id="valor_pago" name="valor_pago" required>
+
+            <label for="fecha_pago">Fecha del Pago:</label>
+            <input type="date" id="fecha_pago" name="fecha_pago" required>
+
             <label for="tipo_pago">Tipo de Pago:</label>
-            <input type="text" id="tipo_pago" name="tipo_pago">
-            
-            <label for="nombre_pago">Nombre del Pago (opcional):</label>
-            <input type="text" id="nombre_pago" name="nombre_pago">
-        
-            <label for="cronograma">ID del Cronograma (opcional):</label>
-            <input type="text" id="cronograma" name="cronograma">
-        
-            <label for="usuario_padre">ID del Usuario Padre (opcional):</label>
-            <input type="text" id="usuario_padre" name="usuario_padre">
-        
-            <label for="recibo">ID del Recibo (opcional):</label>
-            <input type="text" id="recibo" name="recibo">
-        
-            <label for="descuentos">Descuentos (opcional):</label>
-            <select id="descuentos" name="descuentos" multiple>
-                {% for descuento in descuentos %}
-                    <option value="{{ descuento.id }}">{{ descuento.nombre }}</option>
-                {% endfor %}
-            </select>
-        
+            <input type="text" id="tipo_pago" name="tipo_pago" required>
+
             <button type="submit">Procesar Pago</button>
         </form>
     </div>
