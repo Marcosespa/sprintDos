@@ -6,7 +6,7 @@ from usuarioPadreFamilia.models import UsuarioPadreFamilia
 
 class Cronograma(models.Model):
     mes = models.CharField(max_length=20)
-    valor_total = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    valor = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     estado_pago = models.CharField(
         max_length=20,
         choices=[
