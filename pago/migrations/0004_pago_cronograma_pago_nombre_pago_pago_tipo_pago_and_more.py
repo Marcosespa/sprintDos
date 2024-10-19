@@ -7,7 +7,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('cronograma', '0002_cronograma_valor'),
+        #('cronograma', '0002_cronograma_valor'),
         ('pago', '0003_pago_recibo'),
         ('usuarioPadreFamilia', '0002_rename_user_name_usuariopadrefamilia_username_and_more'),
     ]
