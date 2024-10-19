@@ -4,11 +4,15 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import Pago
 from usuarioPadreFamilia.models import UsuarioPadreFamilia  # Asegúrate que esté bien importado
+from django.contrib import messages
+from django.contrib.auth.models import User
+
 
 @login_required
 def procesar_pago(request):
     if request.method == 'POST':
         nombre_pago = request.POST.get('nombre_pago')
+
         valor_pago = request.POST.get('valor_pago')
         fecha_pago = request.POST.get('fecha_pago')
         tipo_pago = request.POST.get('tipo_pago')
@@ -27,4 +31,5 @@ def procesar_pago(request):
         return redirect('index_PadreFamilia')
 
     return render(request, 'procesar_pago.html')
+
 

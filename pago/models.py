@@ -5,7 +5,6 @@ from recibo.models import Recibo
 from usuarioPadreFamilia.models import UsuarioPadreFamilia
 
 class Pago(models.Model):
-
     fecha_pago = models.DateField()
     valor_pago = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     estado_pago = models.CharField(max_length=20, default='PENDIENTE')
