@@ -1,6 +1,6 @@
 from django import forms
 from .models import Pago
-
+#dededede
 class PagoForm(forms.ModelForm):
     class Meta:
         model = Pago
