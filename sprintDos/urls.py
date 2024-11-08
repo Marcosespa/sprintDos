@@ -11,6 +11,6 @@ urlpatterns = [
     path('usuarioPadreFamilia/', include('usuarioPadreFamilia.urls')),
     path('crear-usuario/', views.crear_usuario, name='crear_usuario'),
     path('accounts/', include('django.contrib.auth.urls')),
-    path('health-check/',views.healthCheck),
+    path('health/', views.health_check, name='health'),
     path('procesar_pago/', procesar_pago, name='procesar_pago'), 
 ]
