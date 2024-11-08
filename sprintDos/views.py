@@ -1,5 +1,5 @@
 # views.py en sprintDos
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
@@ -53,5 +53,6 @@ def crear_usuario(request):
 @login_required
 def index_PadreFamilia(request):
     return render(request, 'index_PadreFamilia.html')
-def healthCheck(request):
-    return HttpResponse('ok')
+
+def health_check(request):
+    return JsonResponse({'message': 'OK'}, status=200)
