@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
+from django.http import JsonResponse
 from django.urls import reverse_lazy
 from django.shortcuts import redirect, render
 from django.views.generic.edit import UpdateView
@@ -14,6 +15,7 @@ class SimpleLoginView(LoginView):
     template_name = 'app/login.html'
     redirect_authenticated_user = True
 
+
 @login_required  
 def usuario_padre_familia_edit_view(request):
     usuario = UsuarioPadreFamilia.objects.first()  
@@ -27,6 +29,9 @@ def usuario_padre_familia_edit_view(request):
     return render(request, 'app/usuario_edit.html', {'form': form})
 def index(request):
     return render(request, 'usuarioPadreFamilia/index.html')  
+
+def health_check(request):
+    return JsonResponse({'message': 'OK'}, status=200)
 
 
 def index_PadreFamilia(request):
