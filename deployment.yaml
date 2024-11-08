@@ -172,3 +172,34 @@ resources:
           sudo git clone https://github.com/Marcosespa/sprintDos.git
           cd sprintDos
           sudo pip3 install -r requirements.txt
+# Alarma C
+- type: compute.v1.instance
+  name: cbd-alarms-app-c
+  properties:
+    zone: us-central1-a
+    machineType: https://www.googleapis.com/compute/v1/projects/optimal-cogency-436712-s9/zones/us-central1-a/machineTypes/e2-micro
+    disks:
+    - deviceName: boot
+      type: PERSISTENT
+      boot: true
+      autoDelete: true
+      initializeParams:
+        sourceImage: https://www.googleapis.com/compute/v1/projects/ubuntu-os-cloud/global/images/ubuntu-2004-focal-v20240307b
+    networkInterfaces:
+    - network: https://www.googleapis.com/compute/v1/projects/optimal-cogency-436712-s9/global/networks/default
+      accessConfigs:
+      - name: External NAT
+        type: ONE_TO_ONE_NAT
+    tags:
+      items: 
+      - cbd-services-firewall
+    metadata:
+      items:
+      - key: startup-script
+        value: |
+          #!/bin/bash
+          sudo apt-get update
+          sudo apt install python3-pip -y
+          sudo git clone https://github.com/Marcosespa/sprintDos.git
+          cd sprintDos
+          sudo pip3 install -r requirements.txt
