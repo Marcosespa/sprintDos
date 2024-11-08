@@ -1,0 +1,174 @@
+
+
+resources:
+
+# ---------------------
+# 1. Configuración de Firewalls
+# ---------------------
+
+# Firewall para servicios internos
+- name: cbd-services-apps
+  type: compute.v1.firewall
+  properties:
+    network: https://www.googleapis.com/compute/v1/projects/optimal-cogency-436712-s9/global/networks/default
+    priority: 1000
+    direction: INGRESS
+    sourceTags: 
+    - cbd-circuit-breaker
+    targetTags:
+    - cbd-services-firewall
+    allowed:
+    - IPProtocol: TCP
+      ports: 
+      - 8080
+
+# Firewall para acceso externo al servicio web
+- name: cbd-services-apps-web
+  type: compute.v1.firewall
+  properties:
+    network: https://www.googleapis.com/compute/v1/projects/optimal-cogency-436712-s9/global/networks/default
+    priority: 1000
+    direction: INGRESS
+    sourceRanges: 
+    - 0.0.0.0/0
+    targetTags:
+    - cbd-services-firewall
+    allowed:
+    - IPProtocol: TCP
+      ports: 
+      - 8080
+
+# Firewall para el servicio de circuit breaker
+- name: cbd-circuit-breaker
+  type: compute.v1.firewall
+  properties:
+    network: https://www.googleapis.com/compute/v1/projects/optimal-cogency-436712-s9/global/networks/default
+    priority: 1000
+    direction: INGRESS
+    sourceRanges: 
+    - 0.0.0.0/0
+    targetTags:
+    - cbd-circuit-breaker
+    allowed:
+    - IPProtocol: TCP
+      ports: 
+      - 8000
+
+# Firewall para administración del circuito breaker
+- name: cbd-circuit-breaker-admin
+  type: compute.v1.firewall
+  properties:
+    network: https://www.googleapis.com/compute/v1/projects/optimal-cogency-436712-s9/global/networks/default
+    priority: 1000
+    direction: INGRESS
+    sourceRanges: 
+    - 0.0.0.0/0
+    targetTags:
+    - cbd-circuit-breaker
+    allowed:
+    - IPProtocol: TCP
+      ports: 
+      - 8001
+
+# ---------------------
+# 2. Instancia de Kong API Gateway
+# ---------------------
+
+- type: compute.v1.instance
+  name: cbd-kong-instance
+  properties:
+    zone: us-central1-a
+    machineType: https://www.googleapis.com/compute/v1/projects/optimal-cogency-436712-s9/zones/us-central1-a/machineTypes/e2-micro
+    disks:
+    - deviceName: boot
+      type: PERSISTENT
+      boot: true
+      autoDelete: true
+      initializeParams:
+        sourceImage: https://www.googleapis.com/compute/v1/projects/ubuntu-os-cloud/global/images/ubuntu-2004-focal-v20240307b
+    networkInterfaces:
+    - network: https://www.googleapis.com/compute/v1/projects/optimal-cogency-436712-s9/global/networks/default
+      accessConfigs:
+      - name: External NAT
+        type: ONE_TO_ONE_NAT
+    tags:
+      items: 
+      - cbd-circuit-breaker
+    metadata:
+      items:
+      - key: startup-script
+        value: |
+          #!/bin/bash
+          sudo apt-get update
+          sudo apt install -y curl
+          curl -Lo install_kong.sh https://getkong.org/install
+          bash install_kong.sh
+          sudo kong start
+
+# ---------------------
+# 3. Aplicaciones de Alarma
+# ---------------------
+
+# Alarma A
+- type: compute.v1.instance
+  name: cbd-alarms-app-a
+  properties:
+    zone: us-central1-a
+    machineType: https://www.googleapis.com/compute/v1/projects/optimal-cogency-436712-s9/zones/us-central1-a/machineTypes/e2-micro
+    disks:
+    - deviceName: boot
+      type: PERSISTENT
+      boot: true
+      autoDelete: true
+      initializeParams:
+        sourceImage: https://www.googleapis.com/compute/v1/projects/ubuntu-os-cloud/global/images/ubuntu-2004-focal-v20240307b
+    networkInterfaces:
+    - network: https://www.googleapis.com/compute/v1/projects/optimal-cogency-436712-s9/global/networks/default
+      accessConfigs:
+      - name: External NAT
+        type: ONE_TO_ONE_NAT
+    tags:
+      items: 
+      - cbd-services-firewall
+    metadata:
+      items:
+      - key: startup-script
+        value: |
+          #!/bin/bash
+          sudo apt-get update
+          sudo apt install python3-pip -y
+          sudo git clone https://github.com/Marcosespa/sprintDos.git
+          cd sprintDos
+          sudo pip3 install -r requirements.txt
+
+# Alarma B
+- type: compute.v1.instance
+  name: cbd-alarms-app-b
+  properties:
+    zone: us-central1-a
+    machineType: https://www.googleapis.com/compute/v1/projects/optimal-cogency-436712-s9/zones/us-central1-a/machineTypes/e2-micro
+    disks:
+    - deviceName: boot
+      type: PERSISTENT
+      boot: true
+      autoDelete: true
+      initializeParams:
+        sourceImage: https://www.googleapis.com/compute/v1/projects/ubuntu-os-cloud/global/images/ubuntu-2004-focal-v20240307b
+    networkInterfaces:
+    - network: https://www.googleapis.com/compute/v1/projects/optimal-cogency-436712-s9/global/networks/default
+      accessConfigs:
+      - name: External NAT
+        type: ONE_TO_ONE_NAT
+    tags:
+      items: 
+      - cbd-services-firewall
+    metadata:
+      items:
+      - key: startup-script
+        value: |
+          #!/bin/bash
+          sudo apt-get update
+          sudo apt install python3-pip -y
+          sudo git clone https://github.com/Marcosespa/sprintDos.git
+          cd sprintDos
+          sudo pip3 install -r requirements.txt
