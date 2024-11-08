@@ -45,5 +45,5 @@ upstreams:
 
   - name: monitoring_upstream
     targets:
-      - target: <ip-privada-monitoring-app>:8080
+      - target: 10.128.0.3:8080
         weight: 100
