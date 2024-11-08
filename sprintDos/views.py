@@ -56,3 +56,6 @@ def index_PadreFamilia(request):
 
 def health_check(request):
     return JsonResponse({'message': 'OK'}, status=200)
+
+def cronograma(request):
+    return render(request, 'cronograma_index.html')
