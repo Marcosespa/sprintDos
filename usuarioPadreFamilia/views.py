@@ -9,6 +9,7 @@ from usuarioPadreFamilia.models import UsuarioPadreFamilia
 from cronograma.models import Cronograma
 from pago.models import Pago
 from sprintDos.auth0backend import getRole
+from django.db.models import Sum
 
 class SimpleLoginView(LoginView):
     template_name = 'app/login.html'
@@ -41,7 +42,14 @@ def index_PadreFamilia(request):
     role = getRole(request)
     if role == "Padre de Familia" or role == "Gerente":
         cronogramas = Cronograma.objects.all()
-        return render(request, 'index_PadreFamilia.html', {'cronogramas': cronogramas})
+        pagos = Pago.objects.filter(usuario_padre=request.user)
+        
+        context = {
+            'cronogramas': cronogramas,
+            'pagos_pendientes_count': pagos.filter(estado_pago='PENDIENTE').count(),
+            'total_pagado': pagos.filter(estado_pago='PAGADO').aggregate(Sum('valor_pago'))['valor_pago__sum'] or 0,
+        }
+        return render(request, 'index_PadreFamilia.html', context)
     else:
         return JsonResponse({'message': 'Unauthorized User'}, status=403)
 
@@ -71,3 +79,15 @@ def pagos_filtrados(request):
             return render(request, 'consulta_cronograma.html')
     else:
         return JsonResponse({'message': 'Unauthorized User'}, status=403)
+
+@login_required
+def dashboard_stats(request):
+    user = request.user
+    pagos = Pago.objects.filter(usuario_padre=user)
+    
+    stats = {
+        'pagos_pendientes_count': pagos.filter(estado_pago='PENDIENTE').count(),
+        'total_pagado': pagos.filter(estado_pago='PAGADO').aggregate(Sum('valor_pago'))['valor_pago__sum'] or 0,
+    }
+    
+    return JsonResponse(stats)

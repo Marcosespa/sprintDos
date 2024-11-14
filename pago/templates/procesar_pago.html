@@ -47,6 +47,18 @@
         button:hover {
             background-color: #45a049;
         }
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
@@ -68,9 +80,20 @@
             <label for="tipo_pago">Tipo de Pago:</label>
             <input type="text" id="tipo_pago" name="tipo_pago" required>
         
-            <button type="submit">Procesar Pago</button>
+            <button type="submit" onclick="confirmPayment(event)">Procesar Pago</button>
         </form>
         
     </div>
+    <script>
+    function confirmPayment(event) {
+        event.preventDefault();
+        if (confirm('¿Está seguro de procesar este pago?')) {
+            const button = event.target;
+            button.disabled = true;
+            button.innerHTML = '<span class="spinner"></span> Procesando...';
+            event.target.form.submit();
+        }
+    }
+    </script>
 </body>
 </html>
