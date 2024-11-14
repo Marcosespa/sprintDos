@@ -16,7 +16,7 @@ def procesar_pago(request):
     if request.method == 'POST':
         try:
             rate_limit_payment(request.user.id)
-            usuario_padre = UsuarioPadreFamilia.objects.get(user=request.user)
+            usuario_padre = request.user
             nombre_pago = request.POST.get('nombre_pago')
             valor_pago = request.POST.get('valor_pago')
             fecha_pago = request.POST.get('fecha_pago')
@@ -34,9 +34,6 @@ def procesar_pago(request):
             
             messages.success(request, 'Pago procesado exitosamente.')
             return redirect('index_PadreFamilia')
-        except UsuarioPadreFamilia.DoesNotExist:
-            messages.error(request, 'Error: Usuario no encontrado')
-            return render(request, 'procesar_pago.html')
         except ValidationError as e:
             messages.error(request, str(e))
             return render(request, 'procesar_pago.html')

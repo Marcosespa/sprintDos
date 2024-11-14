@@ -43,15 +43,16 @@ def index_PadreFamilia(request):
     if role == "Padre de Familia" or role == "Gerente":
         cronogramas = Cronograma.objects.all()
         try:
-            usuario_padre = UsuarioPadreFamilia.objects.get(user=request.user)
+            # Get the UsuarioPadreFamilia instance directly from request.user
+            # since UsuarioPadreFamilia is our user model
+            usuario_padre = request.user
             pagos = Pago.objects.filter(usuario_padre=usuario_padre)
             context = {
                 'cronogramas': cronogramas,
                 'pagos_pendientes_count': pagos.filter(estado_pago='PENDIENTE').count(),
                 'total_pagado': pagos.filter(estado_pago='PAGADO').aggregate(Sum('valor_pago'))['valor_pago__sum'] or 0,
             }
-        except UsuarioPadreFamilia.DoesNotExist:
-            # If the user doesn't have a UsuarioPadreFamilia profile
+        except Exception as e:
             context = {
                 'cronogramas': cronogramas,
                 'pagos_pendientes_count': 0,

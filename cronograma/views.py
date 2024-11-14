@@ -11,7 +11,7 @@ from django.views.decorators.csrf import csrf_exempt
 # Vista de índice de cronograma
 @login_required
 def cronograma_index(request):
-    usuario = request.user 
+    usuario = request.user  # This is already a UsuarioPadreFamilia instance
     cronogramas = Cronograma.objects.filter(usuario_padre=usuario)
     cronograma_list = []
     for cronograma in cronogramas:
