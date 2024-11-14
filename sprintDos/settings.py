@@ -139,7 +139,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_URL = "/login/auth0"
 LOGIN_REDIRECT_URL = "/"
-LOGOUT_REDIRECT_URL = "https://dev-rgo1o3badtq3r0pa.us.auth0.com/v2/logout?returnTo=http%3A%2F%2F34.45.80.69:8080"
+LOGOUT_REDIRECT_URL = "https://dev-rgo1o3badtq3r0pa.us.auth0.com/v2/logout?returnTo=http%3A%2F%2F34.31.196.6:8080"
 
 SOCIAL_AUTH_TRAILING_SLASH = False  # Remove end slash from routes
 SOCIAL_AUTH_AUTH0_DOMAIN = 'dev-rgo1o3badtq3r0pa.us.auth0.com'
