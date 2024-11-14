@@ -14,4 +14,7 @@ urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')),
     path('health/', views.health_check, name='health'),
     path('procesar_pago/', procesar_pago, name='procesar_pago'), 
+    path(r'', include('django.contrib.auth.urls')),
+path(r'', include('social_django.urls')),
+
 ]
