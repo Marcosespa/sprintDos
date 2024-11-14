@@ -42,13 +42,21 @@ def index_PadreFamilia(request):
     role = getRole(request)
     if role == "Padre de Familia" or role == "Gerente":
         cronogramas = Cronograma.objects.all()
-        pagos = Pago.objects.filter(usuario_padre=request.user)
-        
-        context = {
-            'cronogramas': cronogramas,
-            'pagos_pendientes_count': pagos.filter(estado_pago='PENDIENTE').count(),
-            'total_pagado': pagos.filter(estado_pago='PAGADO').aggregate(Sum('valor_pago'))['valor_pago__sum'] or 0,
-        }
+        try:
+            usuario_padre = UsuarioPadreFamilia.objects.get(user=request.user)
+            pagos = Pago.objects.filter(usuario_padre=usuario_padre)
+            context = {
+                'cronogramas': cronogramas,
+                'pagos_pendientes_count': pagos.filter(estado_pago='PENDIENTE').count(),
+                'total_pagado': pagos.filter(estado_pago='PAGADO').aggregate(Sum('valor_pago'))['valor_pago__sum'] or 0,
+            }
+        except UsuarioPadreFamilia.DoesNotExist:
+            # If the user doesn't have a UsuarioPadreFamilia profile
+            context = {
+                'cronogramas': cronogramas,
+                'pagos_pendientes_count': 0,
+                'total_pagado': 0,
+            }
         return render(request, 'index_PadreFamilia.html', context)
     else:
         return JsonResponse({'message': 'Unauthorized User'}, status=403)
