@@ -41,24 +41,27 @@ def health_check(request):
 def index_PadreFamilia(request):
     role = getRole(request)
     if role == "Padre de Familia" or role == "Gerente":
-        cronogramas = Cronograma.objects.all()
         try:
-            # Get the UsuarioPadreFamilia instance directly from request.user
-            # since UsuarioPadreFamilia is our user model
             usuario_padre = request.user
             pagos = Pago.objects.filter(usuario_padre=usuario_padre)
+            
+            # Calculate stats safely
+            pagos_pendientes = pagos.filter(estado_pago='PENDIENTE').count()
+            total_pagado = pagos.filter(estado_pago='PAGADO').aggregate(Sum('valor_pago'))['valor_pago__sum'] or 0
+            
             context = {
-                'cronogramas': cronogramas,
-                'pagos_pendientes_count': pagos.filter(estado_pago='PENDIENTE').count(),
-                'total_pagado': pagos.filter(estado_pago='PAGADO').aggregate(Sum('valor_pago'))['valor_pago__sum'] or 0,
+                'pagos_pendientes_count': pagos_pendientes,
+                'total_pagado': total_pagado,
             }
+            return render(request, 'index_PadreFamilia.html', context)
+            
         except Exception as e:
+            print(f"Error en index_PadreFamilia: {str(e)}")
             context = {
-                'cronogramas': cronogramas,
                 'pagos_pendientes_count': 0,
                 'total_pagado': 0,
             }
-        return render(request, 'index_PadreFamilia.html', context)
+            return render(request, 'index_PadreFamilia.html', context)
     else:
         return JsonResponse({'message': 'Unauthorized User'}, status=403)
 
