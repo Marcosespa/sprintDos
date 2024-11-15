@@ -10,12 +10,14 @@ from django.core.mail import send_mail
 from django.core.cache import cache
 from django.core.exceptions import ValidationError
 from datetime import datetime
+from sprintDos.auth0backend import getRole
 
 
 @login_required
 def procesar_pago(request):
     try:
-        if not isinstance(request.user, UsuarioPadreFamilia):
+        role = getRole(request)
+        if role not in ["Padre de Familia", "Gerente"]:
             messages.error(request, 'Acceso no autorizado.')
             return redirect('index_PadreFamilia')
             
@@ -25,12 +27,16 @@ def procesar_pago(request):
             valor_pago = request.POST.get('valor_pago')
             
             concepto = get_object_or_404(ConceptoPago, id=concepto_id)
-            cronograma = Cronograma.objects.get(
-                usuario_padre=request.user,
-                mes=concepto.mes_aplicable,
-                año_escolar=concepto.año_escolar
-            )
-            
+            try:
+                cronograma = Cronograma.objects.get(
+                    usuario_padre=request.user,
+                    mes=concepto.mes_aplicable,
+                    año_escolar=concepto.año_escolar
+                )
+            except Cronograma.DoesNotExist:
+                messages.error(request, 'No se encontró el cronograma correspondiente.')
+                return redirect('index_PadreFamilia')
+                
             cronograma_concepto = CronogramaConcepto.objects.get(
                 cronograma=cronograma,
                 concepto=concepto
@@ -76,7 +82,7 @@ def procesar_pago(request):
                     'vencimiento': rel.concepto.fecha_vencimiento
                 })
         
-        return render(request, 'procesar_pago.html', {
+        return render(request, 'pago/procesar_pago.html', {
             'conceptos_pendientes': conceptos_pendientes,
             'today': datetime.now().date()
         })
