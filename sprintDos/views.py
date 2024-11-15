@@ -8,7 +8,7 @@ from usuarioPadreFamilia.models import UsuarioPadreFamilia
 from django.contrib.auth.models import User  # Importar el modelo de usuario predeterminado de Django
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.csrf import csrf_exempt
-from auth0backend import getRole
+from sprintDos.auth0backend import getRole
 
 
 @login_required
