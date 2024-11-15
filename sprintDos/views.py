@@ -14,7 +14,7 @@ from auth0backend import getRole
 @login_required
 def index(request):
     role = getRole(request)
-    if role == "Gerencia Campus":
+    if role == "Gerente":
         return render(request, 'gerente.html')
     if role == "Padre de Familia":
         return render(request, 'index_PadreFamilia.html')
