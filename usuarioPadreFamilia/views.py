@@ -65,7 +65,7 @@ def index_PadreFamilia(request):
 @login_required
 def salir(request):
     logout(request)
-    return redirect('https://dev-rgo1o3badtq3r0pa.us.auth0.com/v2/logout?returnTo=http%3A%2F%2F34.31.196.6:8080')
+    return redirect('https://dev-rgo1o3badtq3r0pa.us.auth0.com/v2/logout?returnTo=http%3A%2F%2F34.72.148.175:8080')
 
 @login_required
 def cronograma(request):
