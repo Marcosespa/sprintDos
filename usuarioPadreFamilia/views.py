@@ -10,6 +10,7 @@ from cronograma.models import Cronograma
 from pago.models import Pago
 from sprintDos.auth0backend import getRole
 from django.db.models import Sum
+from django.contrib import messages
 
 class SimpleLoginView(LoginView):
     template_name = 'app/login.html'
@@ -77,7 +78,15 @@ def salir(request):
 
 @login_required
 def cronograma(request):
-    return render(request, 'cronograma_index.html')
+    try:
+        role = getRole(request)
+        if role not in ["Padre de Familia", "Gerente"]:
+            messages.error(request, 'Acceso no autorizado.')
+            return redirect('index_PadreFamilia')
+        return render(request, 'cronograma_index.html')
+    except Exception as e:
+        messages.error(request, f'Error al acceder al cronograma: {str(e)}')
+        return redirect('index_PadreFamilia')
 
 @login_required
 def pago(request):
