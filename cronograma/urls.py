@@ -7,4 +7,5 @@ urlpatterns = [
     path('concepto/lista/', views.lista_conceptos, name='lista_conceptos'),
     path('concepto/editar/<int:concepto_id>/', views.editar_concepto, name='editar_concepto'),
     path('pago/agregar/<int:cronograma_id>/', views.agregar_pago, name='agregar_pago'),
+    path('gerente/cronogramas/', views.listado_cronogramas, name='listado_cronogramas'),
 ]

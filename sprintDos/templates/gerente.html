@@ -4,21 +4,137 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel de Gerente</title>
-    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Variables de color */
+        :root {
+            --primary-color: #1e3c72;
+            --secondary-color: #2a5298;
+            --accent-color: #4CAF50;
+            --danger-color: #dc3545;
+            --text-color: #333;
+            --light-bg: #f5f5f5;
+        }
+
+        /* Estilos generales */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--light-bg);
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 1rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        nav {
+            background: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        nav ul {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        nav a:hover {
+            background-color: #f0f0f0;
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 20px;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .dashboard-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 500;
+            background: var(--primary-color);
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background: var(--secondary-color);
+        }
+
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        .logout-btn {
+            background-color: var(--danger-color);
+            color: white;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .logout-btn:hover {
+            background-color: #c82333;
+        }
+    </style>
 </head>
 <body>
     <header>
-        <h1>Panel de Gerente</h1>
-        <nav>
-            <ul>
-                <li><a href="/gerente/reportes">Reportes</a></li>
-                <li><a href="/gerente/cronograma">Cronogramas de Pago</a></li>
-                <li><a href="/gerente/descuentos">Gestión de Descuentos</a></li>
-                <li><a href="/logout">Cerrar Sesión</a></li>
-            </ul>
-        </nav>
         <div class="header-content">
-            <h1>Sistema de Gestión Escolar</h1>
+            <h1>Panel de Gerente</h1>
             <div class="user-info">
                 <span>Bienvenido, {{ request.user.username }}</span>
                 <a href="{% url 'salir' %}" class="logout-btn">Cerrar Sesión</a>
@@ -26,20 +142,24 @@
         </div>
     </header>
 
-
-
     <main>
-        <h2>Bienvenido, Gerente</h2>
-        <section>
-            <h3>Generar Reportes</h3>
-            <button onclick="window.location.href='/gerente/recaudo'">Recaudo entre Fechas</button>
-            <button onclick="window.location.href='/gerente/estado-cuenta'">Estado de Cuenta</button>
-            <button onclick="window.location.href='/gerente/paz-y-salvo'">Paz y Salvo</button>
-        </section>
-        <section>
-            <h3>Interacciones Contables</h3>
-            <button onclick="window.location.href='/gerente/interacciones'">Ver Interacciones</button>
-        </section>
+        <h2>Panel de Control del Gerente</h2>
+        <div class="dashboard-grid">
+            <div class="dashboard-card">
+                <h3>Cronograma de Pagos</h3>
+                <p>Visualiza los cronogramas de pagos.</p>
+                <a href="{% url 'listado_cronogramas' %}" class="btn">Ver Cronogramas</a>
+            </div>
+            <div class="dashboard-card">
+                <h3>Agregar Pago</h3>
+                <p>Agregar los pagos pendientes.</p>
+                <a href="{% url 'procesar_pago' %}" class="btn">Agregar</a>
+            </div>
+        </div>
     </main>
+
+    <footer>
+        <p>&copy; 2024 - Sistema de Gestión para Gerentes</p>
+    </footer>
 </body>
 </html>
