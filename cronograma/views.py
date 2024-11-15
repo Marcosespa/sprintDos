@@ -15,6 +15,10 @@ def es_gerente(user):
 # Vista de índice de cronograma
 @login_required
 def cronograma_index(request):
+    if not isinstance(request.user, UsuarioPadreFamilia):
+        messages.error(request, 'Acceso no autorizado.')
+        return redirect('index_PadreFamilia')
+        
     año_actual = datetime.now().year
     cronogramas = Cronograma.objects.filter(
         usuario_padre=request.user,

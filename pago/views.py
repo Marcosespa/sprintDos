@@ -15,9 +15,10 @@ from datetime import datetime
 @login_required
 def procesar_pago(request):
     try:
-        # Obtener la instancia de UsuarioPadreFamilia relacionada con el usuario actual
-        usuario_padre = UsuarioPadreFamilia.objects.get(user=request.user)
-        
+        if not isinstance(request.user, UsuarioPadreFamilia):
+            messages.error(request, 'Acceso no autorizado.')
+            return redirect('index_PadreFamilia')
+            
         if request.method == 'POST':
             rate_limit_payment(request.user.id)
             concepto_id = request.POST.get('concepto_id')
@@ -25,7 +26,7 @@ def procesar_pago(request):
             
             concepto = get_object_or_404(ConceptoPago, id=concepto_id)
             cronograma = Cronograma.objects.get(
-                usuario_padre=usuario_padre,
+                usuario_padre=request.user,
                 mes=concepto.mes_aplicable,
                 año_escolar=concepto.año_escolar
             )
@@ -45,7 +46,7 @@ def procesar_pago(request):
                 fecha_pago=datetime.now().date(),
                 tipo_pago=concepto.tipo,
                 estado_pago='PENDIENTE',
-                usuario_padre=usuario_padre,
+                usuario_padre=request.user,
                 cronograma=cronograma
             )
             
@@ -58,7 +59,7 @@ def procesar_pago(request):
         # GET request
         conceptos_pendientes = []
         cronogramas = Cronograma.objects.filter(
-            usuario_padre=usuario_padre,
+            usuario_padre=request.user,
             estado__in=['PENDIENTE', 'PARCIAL']
         )
         
@@ -80,8 +81,8 @@ def procesar_pago(request):
             'today': datetime.now().date()
         })
         
-    except UsuarioPadreFamilia.DoesNotExist:
-        messages.error(request, 'No se encontró el perfil de Padre de Familia asociado a este usuario.')
+    except Exception as e:
+        messages.error(request, f'Error al procesar el pago: {str(e)}')
         return redirect('index_PadreFamilia')
 
 
