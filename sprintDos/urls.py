@@ -18,5 +18,7 @@ urlpatterns = [
     path(r'', include('django.contrib.auth.urls')),
     path(r'', include('social_django.urls')),
     path('logout/', LogoutView.as_view(), name='logout'),
-
+    path('pago/', include('pago.urls')),
+    path('usuarioPadreFamilia/', include('usuarioPadreFamilia.urls')),
+    path('cronograma/', include('cronograma.urls')),
 ]

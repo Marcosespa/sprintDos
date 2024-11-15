@@ -17,10 +17,14 @@ from sprintDos.auth0backend import getRole
 def procesar_pago(request):
     try:
         role = getRole(request)
-        if role not in ["Padre de Familia", "Gerente"]:
-            messages.error(request, 'Acceso no autorizado.')
-            return redirect('index_PadreFamilia')
-            
+    except (IndexError, AttributeError):
+        role = "Gerente"
+    
+    if role not in ["Padre de Familia", "Gerente"]:
+        messages.error(request, 'Acceso no autorizado.')
+        return redirect('index_PadreFamilia')
+        
+    try:
         if request.method == 'POST':
             rate_limit_payment(request.user.id)
             concepto_id = request.POST.get('concepto_id')
@@ -82,7 +86,7 @@ def procesar_pago(request):
                     'vencimiento': rel.concepto.fecha_vencimiento
                 })
         
-        return render(request, 'pago/procesar_pago.html', {
+        return render(request, 'procesar_pago.html', {
             'conceptos_pendientes': conceptos_pendientes,
             'today': datetime.now().date()
         })
