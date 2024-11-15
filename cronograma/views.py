@@ -14,8 +14,12 @@ from sprintDos.auth0backend import getRole
 def es_gerente(user):
     return user.groups.filter(name='Gerente').exists()
 
+def es_padre_de_familia(user):
+    return user.groups.filter(name='Padre De Familia').exists()
+
 # Vista de índice de cronograma
 @login_required
+@user_passes_test(es_padre_de_familia)
 def cronograma_index(request):
     if not isinstance(request.user, UsuarioPadreFamilia):
         messages.error(request, 'Acceso no autorizado.')
@@ -55,7 +59,6 @@ def cronograma_index(request):
 def agregar_pago(request, cronograma_id):
     cronograma = get_object_or_404(Cronograma, id=cronograma_id)
 
-   
     if request.method == 'POST':
         form = PagoForm(request.POST)  
         if form.is_valid():
@@ -64,13 +67,17 @@ def agregar_pago(request, cronograma_id):
             pago.usuario_padre = request.user
             pago.save()  # Guardar el pago
 
+            # Actualizar el saldo pendiente del cronograma
+            cronograma.saldo_pendiente = cronograma.valor_total - sum(
+                p.valor_pago for p in cronograma.pagos_asociados.filter(estado_pago='COMPLETADO')
+            )
+            cronograma.save()
+
             messages.success(request, 'Pago agregado exitosamente.')
             return redirect('cronograma_index')
     else:
-       
         form = PagoForm()
 
-    
     return render(request, 'agregar_pago.html', {'form': form, 'cronograma': cronograma})
 
 @login_required
@@ -153,6 +160,7 @@ def editar_concepto(request, concepto_id):
     })
 
 @login_required
+@user_passes_test(es_padre_de_familia)
 def procesar_pago(request):
     try:
         role = getRole(request)
