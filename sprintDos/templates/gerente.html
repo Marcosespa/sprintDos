@@ -17,7 +17,17 @@
                 <li><a href="/logout">Cerrar Sesión</a></li>
             </ul>
         </nav>
+        <div class="header-content">
+            <h1>Sistema de Gestión Escolar</h1>
+            <div class="user-info">
+                <span>Bienvenido, {{ request.user.username }}</span>
+                <a href="{% url 'salir' %}" class="logout-btn">Cerrar Sesión</a>
+            </div>
+        </div>
     </header>
+
+
+
     <main>
         <h2>Bienvenido, Gerente</h2>
         <section>
