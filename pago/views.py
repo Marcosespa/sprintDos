@@ -83,6 +83,8 @@ def enviar_notificacion_pago(pago):
         fail_silently=True,
     )
 
+def index_PadreFamilia(request):
+    return render(request, 'usuarioPadreFamilia/index_PadreFamilia.html')
 
 @login_required
 def historial_pagos(request):
