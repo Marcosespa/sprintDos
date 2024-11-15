@@ -2,7 +2,6 @@ from django.contrib import admin
 from django.urls import include, path
 from django.contrib.auth.views import LogoutView
 
-from pago.views import procesar_pago
 from . import views
 import usuarioPadreFamilia.urls  # Asegúrate de importar las URLs de tu app
 

@@ -17,14 +17,10 @@ from sprintDos.auth0backend import getRole
 def procesar_pago(request):
     try:
         role = getRole(request)
-    except (IndexError, AttributeError):
-        role = "Gerente"
-    
-    if role not in ["Padre de Familia", "Gerente"]:
-        messages.error(request, 'Acceso no autorizado.')
-        return redirect('index_PadreFamilia')
+        if role not in ["Padre de Familia", "Gerente"]:
+            messages.error(request, 'Acceso no autorizado.')
+            return redirect('index_PadreFamilia')
         
-    try:
         if request.method == 'POST':
             rate_limit_payment(request.user.id)
             concepto_id = request.POST.get('concepto_id')
@@ -68,29 +64,34 @@ def procesar_pago(request):
             
         # GET request
         conceptos_pendientes = []
-        cronogramas = Cronograma.objects.filter(
-            usuario_padre=request.user,
-            estado__in=['PENDIENTE', 'PARCIAL']
-        )
-        
-        for cronograma in cronogramas:
-            for rel in CronogramaConcepto.objects.filter(
-                cronograma=cronograma,
-                saldo_pendiente__gt=0
-            ):
-                conceptos_pendientes.append({
-                    'id': rel.concepto.id,
-                    'nombre': rel.concepto.nombre,
-                    'tipo': rel.concepto.get_tipo_display(),
-                    'saldo': rel.saldo_pendiente,
-                    'vencimiento': rel.concepto.fecha_vencimiento
-                })
-        
-        return render(request, 'procesar_pago.html', {
-            'conceptos_pendientes': conceptos_pendientes,
-            'today': datetime.now().date()
-        })
-        
+        try:
+            cronogramas = Cronograma.objects.filter(
+                usuario_padre=request.user,
+                estado__in=['PENDIENTE', 'PARCIAL']
+            )
+            
+            for cronograma in cronogramas:
+                for rel in CronogramaConcepto.objects.filter(
+                    cronograma=cronograma,
+                    saldo_pendiente__gt=0
+                ):
+                    conceptos_pendientes.append({
+                        'id': rel.concepto.id,
+                        'nombre': rel.concepto.nombre,
+                        'tipo': rel.concepto.get_tipo_display(),
+                        'saldo': rel.saldo_pendiente,
+                        'vencimiento': rel.concepto.fecha_vencimiento
+                    })
+            
+            return render(request, 'procesar_pago.html', {
+                'conceptos_pendientes': conceptos_pendientes,
+                'today': datetime.now().date()
+            })
+            
+        except Exception as e:
+            messages.error(request, f'Error al cargar los conceptos de pago: {str(e)}')
+            return redirect('index_PadreFamilia')
+            
     except Exception as e:
         messages.error(request, f'Error al procesar el pago: {str(e)}')
         return redirect('index_PadreFamilia')
