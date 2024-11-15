@@ -2,6 +2,8 @@ from pyexpat.errors import messages
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import messages  
+from cronograma.forms import ConceptoPagoForm
+from pago.forms import PagoForm
 from usuarioPadreFamilia.models import UsuarioPadreFamilia
 from cronograma.models import Cronograma, ConceptoPago, CronogramaConcepto
 from pago.models import Pago
