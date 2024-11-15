@@ -41,6 +41,23 @@
             background-color: #35424a;
             color: white;
         }
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            justify-content: center;
+        }
+        .btn-back {
+            padding: 10px 20px;
+            background-color: #6c757d;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .btn-back:hover {
+            background-color: #5a6268;
+        }
     </style>
 </head>
 <body>
@@ -71,6 +88,9 @@
                 {% endfor %}
             </tbody>
         </table>
+        <div class="button-group">
+            <a href="{% url 'index_PadreFamilia' %}" class="btn-back">Volver a la Página Principal</a>
+        </div>
     </div>
 </body>
 </html>
