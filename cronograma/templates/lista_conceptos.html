@@ -1,0 +1,93 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<div class="container">
+    <h2>Conceptos de Pago - Año Escolar {{ año_actual }}</h2>
+    
+    <div class="actions">
+        <a href="{% url 'crear_concepto_pago' %}" class="btn btn-primary">Crear Nuevo Concepto</a>
+    </div>
+
+    {% for mes, conceptos in conceptos_por_mes.items %}
+    <div class="month-section">
+        <h3>{{ mes }}</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Concepto</th>
+                    <th>Tipo</th>
+                    <th>Valor</th>
+                    <th>Vencimiento</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for concepto in conceptos %}
+                <tr>
+                    <td>{{ concepto.nombre }}</td>
+                    <td>{{ concepto.get_tipo_display }}</td>
+                    <td>S/. {{ concepto.valor }}</td>
+                    <td>{{ concepto.fecha_vencimiento|date:"d/m/Y" }}</td>
+                    <td>
+                        {% if concepto.fecha_vencimiento < today %}
+                        <span class="badge badge-danger">Vencido</span>
+                        {% else %}
+                        <span class="badge badge-success">Vigente</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{% url 'editar_concepto' concepto.id %}" class="btn btn-sm btn-warning">Editar</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% empty %}
+    <div class="alert alert-info">
+        No hay conceptos de pago definidos para este año escolar.
+    </div>
+    {% endfor %}
+</div>
+
+<style>
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    .actions {
+        margin-bottom: 20px;
+    }
+    .month-section {
+        margin-bottom: 30px;
+        background: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    .table th, .table td {
+        padding: 12px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+    .badge {
+        padding: 5px 10px;
+        border-radius: 4px;
+        font-size: 12px;
+    }
+    .badge-danger {
+        background: #dc3545;
+        color: white;
+    }
+    .badge-success {
+        background: #28a745;
+        color: white;
+    }
+</style>
+{% endblock %} 

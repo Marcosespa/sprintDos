@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Procesar Pago No Periódico</title>
+    <title>Procesar Pago</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -75,53 +75,92 @@
         .btn-back:hover {
             background-color: #5a6268;
         }
+        .concepto-card {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+        }
+        .concepto-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        .vencido {
+            color: #dc3545;
+            font-weight: bold;
+        }
+        .vigente {
+            color: #28a745;
+        }
     </style>
 </head>
 <body>
     <header>
-        <h1>Procesar Pago No Periódico</h1>
+        <h1>Procesar Pago</h1>
     </header>
     <div class="container">
-        <form method="POST" action="{% url 'procesar_pago' %}">
-            {% csrf_token %}
-            
-            {% if messages %}
-            <div class="messages">
-                {% for message in messages %}
-                <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
-                    {{ message }}
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+            <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if conceptos_pendientes %}
+            {% for concepto in conceptos_pendientes %}
+            <div class="concepto-card">
+                <div class="concepto-header">
+                    <h3>{{ concepto.nombre }}</h3>
+                    <span class="{% if concepto.vencimiento < today %}vencido{% else %}vigente{% endif %}">
+                        Vence: {{ concepto.vencimiento|date:"d/m/Y" }}
+                    </span>
                 </div>
-                {% endfor %}
+                <p>Tipo: {{ concepto.tipo }}</p>
+                <p>Saldo pendiente: S/. {{ concepto.saldo }}</p>
+                
+                <form method="POST" action="{% url 'procesar_pago' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="concepto_id" value="{{ concepto.id }}">
+                    
+                    <label for="valor_pago_{{ concepto.id }}">Monto a pagar:</label>
+                    <input type="number" 
+                           id="valor_pago_{{ concepto.id }}" 
+                           name="valor_pago" 
+                           step="0.01" 
+                           max="{{ concepto.saldo }}"
+                           required>
+                    
+                    <button type="submit" onclick="return confirmPayment(event)">
+                        Realizar Pago
+                    </button>
+                </form>
             </div>
-            {% endif %}
-            
-            <label for="nombre_pago">Nombre del Pago:</label>
-            <input type="text" id="nombre_pago" name="nombre_pago" required>
-        
-            <label for="valor_pago">Valor del Pago:</label>
-            <input type="number" step="0.01" id="valor_pago" name="valor_pago" required>
-        
-            <label for="fecha_pago">Fecha del Pago:</label>
-            <input type="date" id="fecha_pago" name="fecha_pago" required>
-        
-            <label for="tipo_pago">Tipo de Pago:</label>
-            <input type="text" id="tipo_pago" name="tipo_pago" required>
-        
-            <div class="button-group">
-                <button type="submit" onclick="confirmPayment(event)">Procesar Pago</button>
-                <a href="{% url 'index_PadreFamilia' %}" class="btn-back">Volver a la Página Principal</a>
+            {% endfor %}
+        {% else %}
+            <div class="alert alert-info">
+                No hay pagos pendientes en este momento.
             </div>
-        </form>
+        {% endif %}
+        
+        <div class="button-group">
+            <a href="{% url 'index_PadreFamilia' %}" class="btn-back">Volver a la Página Principal</a>
+        </div>
     </div>
+    
     <script>
     function confirmPayment(event) {
-        event.preventDefault();
-        if (confirm('¿Está seguro de procesar este pago?')) {
-            const button = event.target;
-            button.disabled = true;
-            button.innerHTML = '<span class="spinner"></span> Procesando...';
-            event.target.form.submit();
+        if (!confirm('¿Está seguro de procesar este pago?')) {
+            event.preventDefault();
+            return false;
         }
+        const button = event.target;
+        button.disabled = true;
+        button.innerHTML = '<span class="spinner"></span> Procesando...';
+        return true;
     }
     </script>
 </body>

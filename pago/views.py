@@ -1,14 +1,15 @@
 from django.http import HttpResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .models import Pago
+from .models import Pago, ConceptoPago, Cronograma, CronogramaConcepto
 from usuarioPadreFamilia.models import UsuarioPadreFamilia  # Asegúrate que esté bien importado
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
 from django.core.cache import cache
 from django.core.exceptions import ValidationError
+from datetime import datetime
 
 
 @login_required
@@ -17,60 +18,69 @@ def procesar_pago(request):
         try:
             rate_limit_payment(request.user.id)
             usuario_padre = UsuarioPadreFamilia.objects.get(id=request.user.id)
-            nombre_pago = request.POST.get('nombre_pago')
+            concepto_id = request.POST.get('concepto_id')
             valor_pago = request.POST.get('valor_pago')
-            fecha_pago = request.POST.get('fecha_pago')
-            tipo_pago = request.POST.get('tipo_pago')
-
-            # Debug information before validation
-            print("Datos recibidos del formulario:")
-            print(f"Nombre: {nombre_pago}")
-            print(f"Valor: {valor_pago}")
-            print(f"Fecha: {fecha_pago}")
-            print(f"Tipo: {tipo_pago}")
-            print(f"Usuario: {usuario_padre}")
-
-            # Validation
-            if not all([nombre_pago, valor_pago, fecha_pago, tipo_pago]):
-                messages.error(request, 'Todos los campos son requeridos.')
-                return render(request, 'procesar_pago.html')
-
-            try:
-                valor_pago = float(valor_pago)
-                if valor_pago <= 0:
-                    messages.error(request, 'El valor del pago debe ser mayor a 0.')
-                    return render(request, 'procesar_pago.html')
-            except ValueError:
-                messages.error(request, 'El valor del pago debe ser un número válido.')
-                return render(request, 'procesar_pago.html')
-
-            # Create and save the payment
-            nuevo_pago = Pago.objects.create(
-                nombre_pago=nombre_pago,
-                valor_pago=valor_pago,
-                fecha_pago=fecha_pago,
-                tipo_pago=tipo_pago,
-                estado_pago='PENDIENTE',
-                usuario_padre=usuario_padre
+            
+            concepto = get_object_or_404(ConceptoPago, id=concepto_id)
+            cronograma = Cronograma.objects.get(
+                usuario_padre=usuario_padre,
+                mes=concepto.mes_aplicable,
+                año_escolar=concepto.año_escolar
             )
-
-            if nuevo_pago.pk:
-                messages.success(request, 'Pago procesado exitosamente.')
-                print(f"Pago guardado exitosamente con ID: {nuevo_pago.pk}")
-                return redirect('index_PadreFamilia')
-            else:
-                messages.error(request, 'Error al guardar el pago.')
+            
+            cronograma_concepto = CronogramaConcepto.objects.get(
+                cronograma=cronograma,
+                concepto=concepto
+            )
+            
+            if float(valor_pago) > cronograma_concepto.saldo_pendiente:
+                messages.error(request, 'El valor del pago excede el saldo pendiente.')
                 return render(request, 'procesar_pago.html')
-
-        except UsuarioPadreFamilia.DoesNotExist:
-            messages.error(request, 'Usuario no encontrado como Padre de Familia.')
-            return render(request, 'procesar_pago.html')
+            
+            nuevo_pago = Pago.objects.create(
+                nombre_pago=concepto.nombre,
+                valor_pago=valor_pago,
+                fecha_pago=datetime.now().date(),
+                tipo_pago=concepto.tipo,
+                estado_pago='PENDIENTE',
+                usuario_padre=usuario_padre,
+                cronograma=cronograma
+            )
+            
+            # Actualizar saldo pendiente
+            cronograma_concepto.saldo_pendiente -= float(valor_pago)
+            cronograma_concepto.save()
+            
+            messages.success(request, 'Pago procesado exitosamente.')
+            return redirect('cronograma_index')
+            
         except Exception as e:
-            print(f"Error al procesar el pago: {str(e)}")
             messages.error(request, f'Error al procesar el pago: {str(e)}')
             return render(request, 'procesar_pago.html')
-
-    return render(request, 'procesar_pago.html')
+    
+    # GET request
+    conceptos_pendientes = []
+    cronogramas = Cronograma.objects.filter(
+        usuario_padre=request.user,
+        estado__in=['PENDIENTE', 'PARCIAL']
+    )
+    
+    for cronograma in cronogramas:
+        for rel in CronogramaConcepto.objects.filter(
+            cronograma=cronograma,
+            saldo_pendiente__gt=0
+        ):
+            conceptos_pendientes.append({
+                'id': rel.concepto.id,
+                'nombre': rel.concepto.nombre,
+                'tipo': rel.concepto.get_tipo_display(),
+                'saldo': rel.saldo_pendiente,
+                'vencimiento': rel.concepto.fecha_vencimiento
+            })
+    
+    return render(request, 'procesar_pago.html', {
+        'conceptos_pendientes': conceptos_pendientes
+    })
 
 
 def enviar_notificacion_pago(pago):
