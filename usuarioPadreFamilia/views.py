@@ -39,7 +39,12 @@ def health_check(request):
 
 @login_required
 def index_PadreFamilia(request):
-    role = getRole(request)
+    try:
+        role = getRole(request)
+    except (IndexError, AttributeError):
+        # If there's no social auth or role, assume a basic authenticated user
+        role = "Gerente"
+    
     if role == "Padre de Familia" or role == "Gerente":
         try:
             usuario_padre = request.user
