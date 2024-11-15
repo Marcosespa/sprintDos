@@ -1,6 +1,25 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
+<style>
+    .button-group {
+        display: flex;
+        gap: 10px;
+        margin-top: 20px;
+    }
+    .btn-back {
+        padding: 10px 20px;
+        background-color: #6c757d;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    .btn-back:hover {
+        background-color: #5a6268;
+    }
+</style>
+
 <h2>Agregar Pago para {{ cronograma.nombre }}</h2>
 
 <form method="POST">
@@ -40,7 +59,10 @@
     {{ form.nombre_pago.errors }}  
     <br>
 
-    <button type="submit">Agregar Pago</button>
+    <div class="button-group">
+        <button type="submit">Agregar Pago</button>
+        <a href="{% url 'index_PadreFamilia' %}" class="btn-back">Regresar</a>
+    </div>
 </form>
 
 <a href="{% url 'cronograma_index' %}">Regresar al Cronograma</a>

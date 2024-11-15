@@ -22,6 +22,17 @@ def procesar_pago(request):
             fecha_pago = request.POST.get('fecha_pago')
             tipo_pago = request.POST.get('tipo_pago')
 
+            # Add validation
+            if not all([nombre_pago, valor_pago, fecha_pago, tipo_pago]):
+                messages.error(request, 'Todos los campos son requeridos.')
+                return render(request, 'procesar_pago.html')
+
+            try:
+                valor_pago = float(valor_pago)
+            except ValueError:
+                messages.error(request, 'El valor del pago debe ser un número válido.')
+                return render(request, 'procesar_pago.html')
+
             nuevo_pago = Pago(
                 nombre_pago=nombre_pago,
                 valor_pago=valor_pago,
@@ -30,14 +41,26 @@ def procesar_pago(request):
                 estado_pago='PENDIENTE',
                 usuario_padre=usuario_padre
             )
+
+            # Print debug information
+            print(f"Creando nuevo pago: {nuevo_pago.__dict__}")
+            
             nuevo_pago.save()
             
-            messages.success(request, 'Pago procesado exitosamente.')
-            return redirect('index_PadreFamilia')
+            # Verify the save
+            if nuevo_pago.pk:
+                messages.success(request, 'Pago procesado exitosamente.')
+                return redirect('index_PadreFamilia')
+            else:
+                messages.error(request, 'Error al guardar el pago.')
+                return render(request, 'procesar_pago.html')
+                
         except ValidationError as e:
+            print(f"ValidationError: {str(e)}")
             messages.error(request, str(e))
             return render(request, 'procesar_pago.html')
         except Exception as e:
+            print(f"Error inesperado: {str(e)}")
             messages.error(request, 'Error al procesar el pago. Por favor intente nuevamente.')
             return render(request, 'procesar_pago.html')
     return render(request, 'procesar_pago.html')

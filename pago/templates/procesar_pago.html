@@ -59,6 +59,22 @@
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .btn-back {
+            padding: 10px 20px;
+            background-color: #6c757d;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .btn-back:hover {
+            background-color: #5a6268;
+        }
     </style>
 </head>
 <body>
@@ -80,9 +96,11 @@
             <label for="tipo_pago">Tipo de Pago:</label>
             <input type="text" id="tipo_pago" name="tipo_pago" required>
         
-            <button type="submit" onclick="confirmPayment(event)">Procesar Pago</button>
+            <div class="button-group">
+                <button type="submit" onclick="confirmPayment(event)">Procesar Pago</button>
+                <a href="{% url 'index_PadreFamilia' %}" class="btn-back">Regresar</a>
+            </div>
         </form>
-        
     </div>
     <script>
     function confirmPayment(event) {
