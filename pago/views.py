@@ -2,9 +2,9 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .models import Pago, ConceptoPago, Cronograma, CronogramaConcepto
-from usuarioPadreFamilia.models import UsuarioPadreFamilia  # Asegúrate que esté bien importado
-from django.contrib import messages
+from .models import Pago
+from cronograma.models import ConceptoPago, Cronograma, CronogramaConcepto
+from usuarioPadreFamilia.models import UsuarioPadreFamilia
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
 from django.core.cache import cache
