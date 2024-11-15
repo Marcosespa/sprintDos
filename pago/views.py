@@ -14,10 +14,12 @@ from datetime import datetime
 
 @login_required
 def procesar_pago(request):
-    if request.method == 'POST':
-        try:
+    try:
+        # Obtener la instancia de UsuarioPadreFamilia relacionada con el usuario actual
+        usuario_padre = UsuarioPadreFamilia.objects.get(user=request.user)
+        
+        if request.method == 'POST':
             rate_limit_payment(request.user.id)
-            usuario_padre = UsuarioPadreFamilia.objects.get(id=request.user.id)
             concepto_id = request.POST.get('concepto_id')
             valor_pago = request.POST.get('valor_pago')
             
@@ -47,40 +49,40 @@ def procesar_pago(request):
                 cronograma=cronograma
             )
             
-            # Actualizar saldo pendiente
             cronograma_concepto.saldo_pendiente -= float(valor_pago)
             cronograma_concepto.save()
             
             messages.success(request, 'Pago procesado exitosamente.')
             return redirect('cronograma_index')
             
-        except Exception as e:
-            messages.error(request, f'Error al procesar el pago: {str(e)}')
-            return render(request, 'procesar_pago.html')
-    
-    # GET request
-    conceptos_pendientes = []
-    cronogramas = Cronograma.objects.filter(
-        usuario_padre=request.user,
-        estado__in=['PENDIENTE', 'PARCIAL']
-    )
-    
-    for cronograma in cronogramas:
-        for rel in CronogramaConcepto.objects.filter(
-            cronograma=cronograma,
-            saldo_pendiente__gt=0
-        ):
-            conceptos_pendientes.append({
-                'id': rel.concepto.id,
-                'nombre': rel.concepto.nombre,
-                'tipo': rel.concepto.get_tipo_display(),
-                'saldo': rel.saldo_pendiente,
-                'vencimiento': rel.concepto.fecha_vencimiento
-            })
-    
-    return render(request, 'procesar_pago.html', {
-        'conceptos_pendientes': conceptos_pendientes
-    })
+        # GET request
+        conceptos_pendientes = []
+        cronogramas = Cronograma.objects.filter(
+            usuario_padre=usuario_padre,
+            estado__in=['PENDIENTE', 'PARCIAL']
+        )
+        
+        for cronograma in cronogramas:
+            for rel in CronogramaConcepto.objects.filter(
+                cronograma=cronograma,
+                saldo_pendiente__gt=0
+            ):
+                conceptos_pendientes.append({
+                    'id': rel.concepto.id,
+                    'nombre': rel.concepto.nombre,
+                    'tipo': rel.concepto.get_tipo_display(),
+                    'saldo': rel.saldo_pendiente,
+                    'vencimiento': rel.concepto.fecha_vencimiento
+                })
+        
+        return render(request, 'procesar_pago.html', {
+            'conceptos_pendientes': conceptos_pendientes,
+            'today': datetime.now().date()
+        })
+        
+    except UsuarioPadreFamilia.DoesNotExist:
+        messages.error(request, 'No se encontró el perfil de Padre de Familia asociado a este usuario.')
+        return redirect('index_PadreFamilia')
 
 
 def enviar_notificacion_pago(pago):
