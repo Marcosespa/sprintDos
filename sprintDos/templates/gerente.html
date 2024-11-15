@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Gerente</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Panel de Gerente</h1>
+        <nav>
+            <ul>
+                <li><a href="/gerente/reportes">Reportes</a></li>
+                <li><a href="/gerente/cronograma">Cronogramas de Pago</a></li>
+                <li><a href="/gerente/descuentos">Gestión de Descuentos</a></li>
+                <li><a href="/logout">Cerrar Sesión</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <h2>Bienvenido, Gerente</h2>
+        <section>
+            <h3>Generar Reportes</h3>
+            <button onclick="window.location.href='/gerente/recaudo'">Recaudo entre Fechas</button>
+            <button onclick="window.location.href='/gerente/estado-cuenta'">Estado de Cuenta</button>
+            <button onclick="window.location.href='/gerente/paz-y-salvo'">Paz y Salvo</button>
+        </section>
+        <section>
+            <h3>Interacciones Contables</h3>
+            <button onclick="window.location.href='/gerente/interacciones'">Ver Interacciones</button>
+        </section>
+    </main>
+</body>
+</html>

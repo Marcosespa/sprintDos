@@ -8,12 +8,18 @@ from usuarioPadreFamilia.models import UsuarioPadreFamilia
 from django.contrib.auth.models import User  # Importar el modelo de usuario predeterminado de Django
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.csrf import csrf_exempt
+from auth0backend import getRole
 
 
 @login_required
 def index(request):
-    
-    return render(request, 'index_PadreFamilia.html')
+    role = getRole(request)
+    if role == "Gerencia Campus":
+        return render(request, 'gerente.html')
+    if role == "Padre de Familia":
+        return render(request, 'index_PadreFamilia.html')
+    else:
+        return HttpResponse("Unauthorized User")
 
 
 
