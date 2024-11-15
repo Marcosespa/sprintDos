@@ -22,13 +22,25 @@ def procesar_pago(request):
             fecha_pago = request.POST.get('fecha_pago')
             tipo_pago = request.POST.get('tipo_pago')
 
-            # Add validation
-            if not all([nombre_pago, valor_pago, fecha_pago, tipo_pago]):
-                messages.error(request, 'Todos los campos son requeridos.')
+            # Detailed validation with specific error messages
+            if not nombre_pago:
+                messages.error(request, 'El nombre del pago es requerido.')
+                return render(request, 'procesar_pago.html')
+            if not valor_pago:
+                messages.error(request, 'El valor del pago es requerido.')
+                return render(request, 'procesar_pago.html')
+            if not fecha_pago:
+                messages.error(request, 'La fecha del pago es requerida.')
+                return render(request, 'procesar_pago.html')
+            if not tipo_pago:
+                messages.error(request, 'El tipo de pago es requerido.')
                 return render(request, 'procesar_pago.html')
 
             try:
                 valor_pago = float(valor_pago)
+                if valor_pago <= 0:
+                    messages.error(request, 'El valor del pago debe ser mayor a 0.')
+                    return render(request, 'procesar_pago.html')
             except ValueError:
                 messages.error(request, 'El valor del pago debe ser un número válido.')
                 return render(request, 'procesar_pago.html')
@@ -42,13 +54,24 @@ def procesar_pago(request):
                 usuario_padre=usuario_padre
             )
 
-            # Print debug information
-            print(f"Creando nuevo pago: {nuevo_pago.__dict__}")
+            # Debug information
+            print(f"Datos del pago a crear:")
+            print(f"Nombre: {nombre_pago}")
+            print(f"Valor: {valor_pago}")
+            print(f"Fecha: {fecha_pago}")
+            print(f"Tipo: {tipo_pago}")
+            print(f"Usuario: {usuario_padre.username}")
             
             nuevo_pago.save()
             
-            # Verify the save
+            # Verify the save and send notification
             if nuevo_pago.pk:
+                try:
+                    enviar_notificacion_pago(nuevo_pago)
+                except Exception as e:
+                    print(f"Error al enviar notificación: {str(e)}")
+                    # Continue even if notification fails
+                
                 messages.success(request, 'Pago procesado exitosamente.')
                 return redirect('index_PadreFamilia')
             else:
@@ -60,9 +83,10 @@ def procesar_pago(request):
             messages.error(request, str(e))
             return render(request, 'procesar_pago.html')
         except Exception as e:
-            print(f"Error inesperado: {str(e)}")
+            print(f"Error inesperado: {type(e).__name__} - {str(e)}")
             messages.error(request, 'Error al procesar el pago. Por favor intente nuevamente.')
             return render(request, 'procesar_pago.html')
+    
     return render(request, 'procesar_pago.html')
 
 
