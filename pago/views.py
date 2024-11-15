@@ -16,7 +16,7 @@ def procesar_pago(request):
     if request.method == 'POST':
         try:
             rate_limit_payment(request.user.id)
-            usuario_padre = request.user
+            usuario_padre = UsuarioPadreFamilia.objects.get(id=request.user.id)
             nombre_pago = request.POST.get('nombre_pago')
             valor_pago = request.POST.get('valor_pago')
             fecha_pago = request.POST.get('fecha_pago')
@@ -54,7 +54,6 @@ def procesar_pago(request):
                 usuario_padre=usuario_padre
             )
 
-            # Verify the save was successful
             if nuevo_pago.pk:
                 messages.success(request, 'Pago procesado exitosamente.')
                 print(f"Pago guardado exitosamente con ID: {nuevo_pago.pk}")
@@ -63,6 +62,9 @@ def procesar_pago(request):
                 messages.error(request, 'Error al guardar el pago.')
                 return render(request, 'procesar_pago.html')
 
+        except UsuarioPadreFamilia.DoesNotExist:
+            messages.error(request, 'Usuario no encontrado como Padre de Familia.')
+            return render(request, 'procesar_pago.html')
         except Exception as e:
             print(f"Error al procesar el pago: {str(e)}")
             messages.error(request, f'Error al procesar el pago: {str(e)}')
