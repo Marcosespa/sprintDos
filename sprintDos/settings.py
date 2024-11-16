@@ -156,6 +156,8 @@ SOCIAL_AUTH_AUTH0_SCOPE = [
     'email',
     'read:roles'
 ]
+SOCIAL_AUTH_AUTH0_API_AUDIENCE = 'https://dev-rgo1o3badtq3r0pa.us.auth0.com/api/v2/'
+
 
 AUTHENTICATION_BACKENDS = {
     'sprintDos.auth0backend.Auth0',
