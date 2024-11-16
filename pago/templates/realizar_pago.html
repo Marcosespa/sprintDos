@@ -126,7 +126,7 @@
         {% endif %}
 
         <div class="payment-form">
-            <form method="POST" action="{% url 'pago:realizar_pago' %}">
+            <form method="POST" action="{% url 'pago:realiar_pago' %}">
                 {% csrf_token %}
                 
                 <div class="form-group">
@@ -160,10 +160,10 @@
 
                 <button type="submit" class="btn-submit">Procesar Pago</button>
             </form>
-            
-            <div class="button-group">
-                <a href="{% url 'index_PadreFamilia' %}" class="btn-back">Volver a la Página Principal</a>
-            </div>
+        </div>
+
+        <div class="button-group">
+            <a href="{% url 'index_PadreFamilia' %}" class="btn-back">Volver a la Página Principal</a>
         </div>
     </div>
     <script>
