@@ -21,10 +21,10 @@ def index(request):
             return render(request, 'index_PadreFamilia.html')
         else:
             messages.warning(request, 'No se pudo verificar su rol. Por favor, intente más tarde.')
-            return redirect('login')
+            return redirect('/login/auth0')
     except Exception as e:
         messages.error(request, f'Error de autenticación: {str(e)}')
-        return redirect('login')
+        return redirect('/login/auth0')
 
 
 

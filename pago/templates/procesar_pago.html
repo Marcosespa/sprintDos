@@ -122,7 +122,7 @@
                 <p>Tipo: {{ concepto.tipo }}</p>
                 <p>Saldo pendiente: S/. {{ concepto.saldo }}</p>
                 
-                <form method="POST" action="{% url 'procesar_pago' %}">
+                <form method="POST" action="{% url 'pago:procesar_pago' %}">
                     {% csrf_token %}
                     <input type="hidden" name="concepto_id" value="{{ concepto.id }}">
                     
