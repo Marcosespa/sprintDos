@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Realizar Pago</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .payment-header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px 8px 0 0;
+            margin-bottom: 20px;
+        }
+
+        .payment-form {
+            padding: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        select, input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-top: 5px;
+        }
+
+        .payment-summary {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+
+        .btn-submit {
+            background: #1e3c72;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+        }
+
+        .btn-submit:hover {
+            background: #2a5298;
+        }
+
+        .error-message {
+            color: #dc3545;
+            margin-top: 5px;
+            font-size: 14px;
+        }
+
+        .success-message {
+            color: #28a745;
+            margin-top: 5px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="payment-header">
+            <h1>Realizar Pago</h1>
+        </div>
+
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+            <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <div class="payment-form">
+            <form method="POST" action="{% url 'procesar_pago' %}">
+                {% csrf_token %}
+                
+                <div class="form-group">
+                    <label for="concepto">Seleccione el concepto a pagar:</label>
+                    <select name="concepto_id" id="concepto" required>
+                        <option value="">Seleccione un concepto</option>
+                        {% for concepto in conceptos_pendientes %}
+                        <option value="{{ concepto.id }}" 
+                                data-saldo="{{ concepto.saldo }}"
+                                data-vencimiento="{{ concepto.vencimiento|date:'Y-m-d' }}">
+                            {{ concepto.nombre }} - Saldo: S/. {{ concepto.saldo }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="payment-summary" id="payment-details" style="display: none;">
+                    <h3>Detalles del pago</h3>
+                    <p>Fecha de vencimiento: <span id="fecha-vencimiento"></span></p>
+                    <p>Saldo pendiente: S/. <span id="saldo-pendiente"></span></p>
+                </div>
+
+                <div class="form-group">
+                    <label for="valor_pago">Monto a pagar:</label>
+                    <input type="number" 
+                           id="valor_pago" 
+                           name="valor_pago" 
+                           step="0.01" 
+                           required>
+                </div>
+
+                <button type="submit" class="btn-submit">Procesar Pago</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('concepto').addEventListener('change', function() {
+            const selectedOption = this.options[this.selectedIndex];
+            const paymentDetails = document.getElementById('payment-details');
+            
+            if (this.value) {
+                const saldo = selectedOption.dataset.saldo;
+                const vencimiento = selectedOption.dataset.vencimiento;
+                
+                document.getElementById('saldo-pendiente').textContent = saldo;
+                document.getElementById('fecha-vencimiento').textContent = vencimiento;
+                document.getElementById('valor_pago').max = saldo;
+                
+                paymentDetails.style.display = 'block';
+            } else {
+                paymentDetails.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html> 

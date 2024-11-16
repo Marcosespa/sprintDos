@@ -168,3 +168,39 @@ def pago_pendiente(request):
         'cronogramas': cronogramas,
         'usuarios': usuarios
     })
+
+@login_required
+def realizar_pago(request):
+    try:
+        role = getRole(request)
+        if role not in ["Padre de Familia", "Gerente"]:
+            messages.error(request, 'Acceso no autorizado.')
+            return redirect('index_PadreFamilia')
+        
+        conceptos_pendientes = []
+        cronogramas = Cronograma.objects.filter(
+            usuario_padre=request.user,
+            estado__in=['PENDIENTE', 'PARCIAL']
+        )
+        
+        for cronograma in cronogramas:
+            for rel in CronogramaConcepto.objects.filter(
+                cronograma=cronograma,
+                saldo_pendiente__gt=0
+            ):
+                conceptos_pendientes.append({
+                    'id': rel.concepto.id,
+                    'nombre': rel.concepto.nombre,
+                    'tipo': rel.concepto.get_tipo_display(),
+                    'saldo': rel.saldo_pendiente,
+                    'vencimiento': rel.concepto.fecha_vencimiento
+                })
+        
+        return render(request, 'pago/realizar_pago.html', {
+            'conceptos_pendientes': conceptos_pendientes,
+            'today': datetime.now().date()
+        })
+        
+    except Exception as e:
+        messages.error(request, f'Error al cargar la página de pagos: {str(e)}')
+        return redirect('index_PadreFamilia')
