@@ -80,15 +80,7 @@ def salir(request):
 
 @login_required
 def cronograma(request):
-    try:
-        role = getRole(request)
-        if role not in ["Padre de Familia", "Gerente"]:
-            messages.error(request, 'Acceso no autorizado.')
-            return redirect('index_PadreFamilia')
-        return render(request, 'cronograma_index.html')
-    except Exception as e:
-        messages.error(request, f'Error al acceder al cronograma: {str(e)}')
-        return redirect('index_PadreFamilia')
+    return redirect('cronograma:listado_cronogramas')
 
 @login_required
 def pago(request):

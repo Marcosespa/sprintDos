@@ -8,5 +8,5 @@ urlpatterns = [
     path('concepto/editar/<int:concepto_id>/', views.editar_concepto, name='editar_concepto'),
     path('pago/agregar/<int:cronograma_id>/', views.agregar_pago, name='agregar_pago'),
     path('gerente/cronogramas/', views.listado_cronogramas, name='listado_cronogramas'),
-    #path('procesar-pago/', views.procesar_pago, name='cronograma_procesar_pago'),
+    path('procesar-pago/', views.procesar_pago, name='cronograma_procesar_pago'),
 ]
