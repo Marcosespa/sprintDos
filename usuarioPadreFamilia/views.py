@@ -93,8 +93,6 @@ def cronograma(request):
 @login_required
 def pago(request):
     return render(request, 'procesar_pago.html')
-def realizar_pago(request):
-    return render(request, 'realizar_pago.html')
 
 @login_required
 def pagos_filtrados(request):
