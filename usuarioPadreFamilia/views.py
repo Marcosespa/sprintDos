@@ -81,7 +81,7 @@ def salir(request):
 @login_required
 def cronograma(request):
     return redirect('cronograma_index')
-
+#commmmennes
 @login_required
 def pago(request):
     return render(request, 'procesar_pago.html')
