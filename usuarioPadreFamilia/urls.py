@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from . import views
 from .views import index_PadreFamilia  # Importar la vista desde views.py
 
@@ -11,6 +11,7 @@ urlpatterns = [
     path('procesar_pago/', views.pago, name='procesar_pago'),
     path('realizar_pago/', views.realizarpago, name='realizar_pago'),
     path('pagos/', views.pagos_filtrados, name='pagos_filtrados'),
-    path('salir/', views.salir, name='salir')
+    path('salir/', views.salir, name='salir'),
+    path('cronograma/', include('cronograma.urls')),
 ]
 
