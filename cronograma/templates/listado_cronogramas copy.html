@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listado de Cronogramas</title>
+    <style>
+        .cronograma {
+            cursor: pointer;
+            padding: 10px;
+            background-color: #f0f0f0;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .detalle {
+            display: none;
+            padding: 10px;
+            background-color: #e0e0e0;
+            border-left: 5px solid #007bff;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Listado de Cronogramas</h1>
+<div id="cronogramas-list">
+    {% for cronograma in cronogramas %}
+    <!-- Bloque del cronograma -->
+    <div class="cronograma" onclick="toggleDetalle('{{ cronograma.id }}')">
+        <strong>Usuario: {{ cronograma.usuario_padre.username }}</strong>
+    </div>
+
+    <!-- Bloque de detalles del cronograma -->
+    <div class="detalle" id="detalle-{{ cronograma.id }}" style="display: none; margin-left: 20px;">
+        <div style="background-color: #f0f0f0; padding: 10px; border-radius: 8px;">
+            <h3>Información del Cronograma</h3>
+            <p><strong>Mes:</strong> {{ cronograma.mes }}</p>
+            <p><strong>Valor Total:</strong> ${{ cronograma.valor_total }}</p>
+            <p><strong>Estado:</strong> {{ cronograma.estado_pago }}</p>
+        </div>
+
+        {% load custom_filters %}
+        <!-- Bloque de pagos asociados -->
+        <div style="background-color: #f0f0f0; padding: 10px; border-radius: 8px; margin-top: 20px;">
+            <h3>Pagos Asociados</h3>
+            {% with pagos|get_item:cronograma.id as pagos_cronograma %}
+                {% if pagos_cronograma %}
+                    {% for pago in pagos_cronograma %}
+                        <div style="padding: 10px; border-bottom: 1px solid #ccc;">
+                            <p><strong>Fecha de Pago:</strong> {{ pago.fecha_pago }}</p>
+                            <p><strong>Valor:</strong> ${{ pago.valor_pago }}</p>
+                            <p><strong>Estado:</strong> {{ pago.estado_pago }}</p>
+                            <p><strong>Tipo de Pago:</strong> {{ pago.tipo_pago }}</p>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p>No hay pagos asociados.</p>
+                {% endif %}
+            {% endwith %}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+-
+
+    <script>
+        function toggleDetalle(id) {
+            const detalle = document.getElementById('detalle-' + id);
+            if (detalle.style.display === 'none' || detalle.style.display === '') {
+                detalle.style.display = 'block';
+            } else {
+                detalle.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
