@@ -80,7 +80,7 @@ def salir(request):
 
 @login_required
 def cronograma(request):
-    return redirect('cronograma:listado_cronogramas')
+    return redirect('cronograma_index')
 
 @login_required
 def pago(request):
