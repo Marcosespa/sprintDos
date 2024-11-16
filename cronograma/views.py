@@ -176,45 +176,49 @@ def editar_concepto(request, concepto_id):
 @login_required
 @user_passes_test(es_padre_de_familia)
 def procesar_pago(request):
+    print("Iniciando procesar_pago")  # Mensaje de depuración
     try:
         role = getRole(request)
-    except (IndexError, AttributeError):
-        role = "Gerente"
-    
-    if role not in ["Padre de Familia", "Gerente"]:
-        messages.error(request, 'Acceso no autorizado.')
-        return redirect('index_PadreFamilia')
+        print(f"Role obtenido: {role}")  # Mensaje de depuración
         
-    try:
-        if request.method == 'POST':
-            # El resto del código POST permanece igual
-            ...
+        if role not in ["Padre de Familia", "Gerente"]:
+            messages.error(request, 'Acceso no autorizado.')
+            return redirect('index_PadreFamilia')
         
-        # GET request
-        conceptos_pendientes = []
-        cronogramas = Cronograma.objects.filter(
-            usuario_padre=request.user,
-            estado__in=['PENDIENTE', 'PARCIAL']
-        )
-        
-        for cronograma in cronogramas:
-            for rel in CronogramaConcepto.objects.filter(
-                cronograma=cronograma,
-                saldo_pendiente__gt=0
-            ):
-                conceptos_pendientes.append({
-                    'id': rel.concepto.id,
-                    'nombre': rel.concepto.nombre,
-                    'tipo': rel.concepto.get_tipo_display(),
-                    'saldo': rel.saldo_pendiente,
-                    'vencimiento': rel.concepto.fecha_vencimiento
-                })
-        
-        return render(request, 'procesar_pago.html', {
-            'conceptos_pendientes': conceptos_pendientes,
-            'today': datetime.now().date()
-        })
-        
+        try:
+            # GET request
+            conceptos_pendientes = []
+            cronogramas = Cronograma.objects.filter(
+                usuario_padre=request.user,
+                estado__in=['PENDIENTE', 'PARCIAL']
+            )
+            
+            for cronograma in cronogramas:
+                for rel in CronogramaConcepto.objects.filter(
+                    cronograma=cronograma,
+                    saldo_pendiente__gt=0
+                ):
+                    conceptos_pendientes.append({
+                        'id': rel.concepto.id,
+                        'nombre': rel.concepto.nombre,
+                        'tipo': rel.concepto.get_tipo_display(),
+                        'saldo': rel.saldo_pendiente,
+                        'vencimiento': rel.concepto.fecha_vencimiento
+                    })
+            
+            if not conceptos_pendientes:
+                messages.info(request, 'No hay pagos pendientes.')
+                return redirect('index_PadreFamilia')
+            
+            print(f"Conceptos pendientes encontrados: {len(conceptos_pendientes)}")  # Mensaje de depuración
+            return render(request, 'procesar_pago.html', {
+                'conceptos_pendientes': conceptos_pendientes,
+                'today': datetime.now().date()
+            })
+            
+        except Exception as e:
+            messages.error(request, f'Error al procesar el pago: {str(e)}')
+            return redirect('index_PadreFamilia')
     except Exception as e:
-        messages.error(request, f'Error al procesar el pago: {str(e)}')
+        messages.error(request, f'Error al obtener el rol: {str(e)}')
         return redirect('index_PadreFamilia')
