@@ -19,7 +19,7 @@ class SimpleLoginView(LoginView):
 @login_required  
 def usuario_padre_familia_edit_view(request):
     role = getRole(request)
-    if role == "Gerente":
+    if role == "Gerente" or role=="Padre de Familia":
         usuario = UsuarioPadreFamilia.objects.first()
         if request.method == 'POST':
             form = UsuarioPadreFamilia(request.POST, instance=usuario)
@@ -42,11 +42,14 @@ def health_check(request):
 def index_PadreFamilia(request):
     try:
         role = getRole(request)
-    except (IndexError, AttributeError):
-        # If there's no social auth or role, assume a basic authenticated user
-        role = "Gerente"
-    
-    if role == "Padre de Familia" or role == "Gerente":
+        if not role:  # Si no se puede obtener el rol
+            messages.error(request, 'No se pudo verificar el rol del usuario.')
+            return JsonResponse({'message': 'Error de autenticación'}, status=401)
+        
+        if role not in ["Padre de Familia", "Gerente"]:
+            messages.error(request, 'No tiene permisos para acceder a esta página.')
+            return JsonResponse({'message': 'Unauthorized User'}, status=403)
+        
         try:
             usuario_padre = request.user
             pagos = Pago.objects.filter(usuario_padre=usuario_padre)
@@ -58,18 +61,17 @@ def index_PadreFamilia(request):
             context = {
                 'pagos_pendientes_count': pagos_pendientes,
                 'total_pagado': total_pagado,
+                'role': role,  # Agregar el rol al contexto
             }
             return render(request, 'index_PadreFamilia.html', context)
             
         except Exception as e:
-            print(f"Error en index_PadreFamilia: {str(e)}")
-            context = {
-                'pagos_pendientes_count': 0,
-                'total_pagado': 0,
-            }
-            return render(request, 'index_PadreFamilia.html', context)
-    else:
-        return JsonResponse({'message': 'Unauthorized User'}, status=403)
+            messages.error(request, f'Error al obtener datos de pagos: {str(e)}')
+            return JsonResponse({'message': 'Error al procesar la solicitud'}, status=500)
+            
+    except (IndexError, AttributeError) as e:
+        messages.error(request, 'Error de autenticación')
+        return JsonResponse({'message': 'Error de autenticación'}, status=401)
 
 @login_required
 def salir(request):
