@@ -37,12 +37,21 @@ class Auth0(BaseOAuth2):
 #COMENTARIO PARA MODIIFCAR
 # Esta función está POR FUERA de la clase Auth0. Es una función independiente.
 def getRole(request):
-    user = request.user
-    auth0user = user.social_auth.filter(provider="auth0")[0]
-    accessToken = auth0user.extra_data['access_token']
-    url = "https://dev-rgo1o3badtq3r0pa.us.auth0.com/userinfo"
-    headers = {'authorization': 'Bearer ' + accessToken}
-    resp = requests.get(url, headers=headers)
-    userinfo = resp.json()
-    role = userinfo['dev-rgo1o3badtq3r0pa.us.auth0.com/role']
-    return (role)
+    try:
+        user = request.user
+        auth0user = user.social_auth.filter(provider="auth0")[0]
+        accessToken = auth0user.extra_data['access_token']
+        url = "https://dev-rgo1o3badtq3r0pa.us.auth0.com/userinfo"
+        headers = {'authorization': 'Bearer ' + accessToken}
+        resp = requests.get(url, headers=headers)
+        userinfo = resp.json()
+        
+        # Intenta obtener el rol de diferentes maneras posibles
+        role = userinfo.get('dev-rgo1o3badtq3r0pa.us.auth0.com/role') or \
+               userinfo.get('role') or \
+               userinfo.get('https://dev-rgo1o3badtq3r0pa.us.auth0.com/roles', ['Usuario'])[0]
+        
+        return role
+    except Exception as e:
+        print(f"Error getting role: {str(e)}")
+        return "Usuario"  # Rol por defecto
