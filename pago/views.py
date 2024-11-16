@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import Pago
-from cronograma.models import ConceptoPago, Cronograma, CronogramaConcepto
+from cronograma.models import ConceptoPago, Cronograma, CronogramaConcepto, Descuento
 from usuarioPadreFamilia.models import UsuarioPadreFamilia
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
@@ -124,3 +124,47 @@ def rate_limit_payment(user_id):
     cache.set(cache_key, attempts + 1, 3600)  # 1 hour expiry
 
 
+def pago_pendiente(request):
+    descuentos = Descuento.objects.all()
+    cronogramas = Cronograma.objects.all()
+    usuarios = UsuarioPadreFamilia.objects.all()
+
+    if request.method == 'POST':
+        nombre_pago = request.POST.get('nombre_pago')
+        valor_pago = request.POST.get('valor_pago')
+        fecha_pago = request.POST.get('fecha_pago')
+        tipo_pago = request.POST.get('tipo_pago')
+
+        descuento_id = request.POST.get('descuentos')
+        cronograma_id = request.POST.get('cronograma')
+        usuario_id = request.POST.get('usuario')
+
+        # Obtener las instancias seleccionadas
+        descuento = Descuento.objects.get(id=descuento_id) if descuento_id else None
+        cronograma = Cronograma.objects.get(id=cronograma_id) if cronograma_id else None
+        usuario = UsuarioPadreFamilia.objects.get(id=usuario_id) if usuario_id else None
+
+        # Crear el nuevo pago
+        nuevo_pago = Pago(
+            nombre_pago=nombre_pago,
+            valor_pago=valor_pago,
+            fecha_pago=fecha_pago,
+            tipo_pago=tipo_pago,
+            estado_pago='PENDIENTE',
+            cronograma=cronograma,
+            usuario_padre=usuario
+        )
+        nuevo_pago.save()
+
+        # Asociar el descuento al pago
+        if descuento:
+            nuevo_pago.descuentos.add(descuento)
+
+        messages.success(request, 'Pago pendiente agregado exitosamente.')
+        return redirect('/')  # Redirigir después de guardar
+
+    return render(request, 'pago_pendiente.html', {
+        'descuentos': descuentos,
+        'cronogramas': cronogramas,
+        'usuarios': usuarios
+    })
