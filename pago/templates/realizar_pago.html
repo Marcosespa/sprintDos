@@ -140,7 +140,9 @@
             </form>
         </div>
     </div>
-
+    <div class="button-group">
+        <a href="{% url 'index_PadreFamilia' %}" class="btn-back">Volver a la Página Principal</a>
+    </div>
     <script>
         document.getElementById('concepto').addEventListener('change', function() {
             const selectedOption = this.options[this.selectedIndex];
@@ -160,5 +162,6 @@
             }
         });
     </script>
+    
 </body>
 </html> 
