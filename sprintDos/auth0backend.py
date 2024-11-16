@@ -34,7 +34,7 @@ class Auth0(BaseOAuth2):
             "picture": userinfo["picture"],
             "user_id": userinfo["sub"]
         }
-#COMENTARIO PARA MODIIFCAR
+#COMENTARIO PARA MODIIFCAR#jdejdjejkdejk
 # Esta función está POR FUERA de la clase Auth0. Es una función independiente.
 def getRole(request):
     try:
