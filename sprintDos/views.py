@@ -13,13 +13,18 @@ from sprintDos.auth0backend import getRole
 
 @login_required
 def index(request):
-    role = getRole(request)
-    if role == "Gerente":
-        return render(request, 'gerente.html')
-    if role == "Padre de Familia":
-        return render(request, 'index_PadreFamilia.html')
-    else:
-        return HttpResponse("Unauthorized User")
+    try:
+        role = getRole(request)
+        if role == "Gerente":
+            return render(request, 'gerente.html')
+        elif role == "Padre de Familia":
+            return render(request, 'index_PadreFamilia.html')
+        else:
+            messages.warning(request, 'No se pudo verificar su rol. Por favor, intente más tarde.')
+            return redirect('login')
+    except Exception as e:
+        messages.error(request, f'Error de autenticación: {str(e)}')
+        return redirect('login')
 
 
 

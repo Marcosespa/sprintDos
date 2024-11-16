@@ -1,5 +1,9 @@
 import requests
 from social_core.backends.oauth import BaseOAuth2
+from django.core.cache import cache
+import logging
+
+logger = logging.getLogger(__name__)
 
 class Auth0(BaseOAuth2):
     """Auth0 OAuth authentication backend"""
@@ -34,24 +38,44 @@ class Auth0(BaseOAuth2):
             "picture": userinfo["picture"],
             "user_id": userinfo["sub"]
         }
-#COMENTARIO PARA MODIIFCAR#jdejdjejkdejk
-# Esta función está POR FUERA de la clase Auth0. Es una función independiente.
+
 def getRole(request):
     try:
         user = request.user
+        # Intentar obtener el rol del caché primero
+        cache_key = f'user_role_{user.id}'
+        cached_role = cache.get(cache_key)
+        if cached_role:
+            return cached_role
+
         auth0user = user.social_auth.filter(provider="auth0")[0]
         accessToken = auth0user.extra_data['access_token']
         url = "https://dev-rgo1o3badtq3r0pa.us.auth0.com/userinfo"
         headers = {'authorization': 'Bearer ' + accessToken}
+        
         resp = requests.get(url, headers=headers)
+        
+        if resp.status_code == 429:
+            # Si hay rate limiting, usar el rol cacheado anterior o un rol por defecto
+            logger.warning(f"Rate limit hit for user {user.id}")
+            return cache.get(cache_key, "Usuario")
+            
+        if resp.status_code != 200:
+            logger.error(f"Error getting role: {resp.status_code} - {resp.text}")
+            return "Usuario"
+
         userinfo = resp.json()
         
         # Intenta obtener el rol de diferentes maneras posibles
-        role = userinfo.get('dev-rgo1o3badtq3r0pa.us.auth0.com/role') or \
-               userinfo.get('role') or \
-               userinfo.get('https://dev-rgo1o3badtq3r0pa.us.auth0.com/roles', ['Usuario'])[0]
+        role = (userinfo.get('dev-rgo1o3badtq3r0pa.us.auth0.com/role') or 
+                userinfo.get('role') or 
+                userinfo.get('https://dev-rgo1o3badtq3r0pa.us.auth0.com/roles', ['Usuario'])[0])
+        
+        # Guardar en caché por 1 hora
+        cache.set(cache_key, role, 3600)
         
         return role
+        
     except Exception as e:
-        print(f"Error getting role: {str(e)}")
-        return "Usuario"  # Rol por defecto
+        logger.error(f"Error in getRole: {str(e)}")
+        return "Usuario"
