@@ -33,10 +33,11 @@ class Auth0(BaseOAuth2):
         userinfo = resp.json()
 
         return {
-            "username": userinfo["nickname"],
-            "first_name": userinfo["name"],
-            "picture": userinfo["picture"],
-            "user_id": userinfo["sub"]
+            "username": userinfo.get("nickname") or userinfo.get("name") or userinfo.get("email", ""),
+            "first_name": userinfo.get("name", ""),
+            "picture": userinfo.get("picture", ""),
+            "user_id": userinfo.get("sub", ""),
+            "email": userinfo.get("email", "")
         }
 
 def getRole(request):
