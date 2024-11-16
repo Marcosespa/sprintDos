@@ -153,12 +153,12 @@ SOCIAL_AUTH_AUTH0_CALLBACK_URL = 'http://35.238.115.206:8080/complete/auth0'
 SOCIAL_AUTH_AUTH0_SCOPE = [
     'openid',
     'profile',
-    'email',
-    ]
-SOCIAL_AUTH_AUTH0_API_AUDIENCE = None
+    'email'
+]
 
+SOCIAL_AUTH_AUTH0_JWT_ENABLED = False
 
-AUTHENTICATION_BACKENDS = {
+AUTHENTICATION_BACKENDS = (
     'social_core.backends.auth0.Auth0OAuth2',
     'django.contrib.auth.backends.ModelBackend',
-}
+)
