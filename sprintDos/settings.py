@@ -155,10 +155,10 @@ SOCIAL_AUTH_AUTH0_SCOPE = [
     'profile',
     'email',
     ]
-SOCIAL_AUTH_AUTH0_API_AUDIENCE = 'https://dev-rgo1o3badtq3r0pa.us.auth0.com/api/v2/'
+SOCIAL_AUTH_AUTH0_API_AUDIENCE = None
 
 
 AUTHENTICATION_BACKENDS = {
-    'sprintDos.auth0backend.Auth0',
+    'social_core.backends.auth0.Auth0OAuth2',
     'django.contrib.auth.backends.ModelBackend',
 }
